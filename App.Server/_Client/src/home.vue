@@ -47,6 +47,37 @@
 				</li>
 			</ul>
 		</div>
+		<div v-if="info?.pages > 1">
+			<div class="flex flex-col text-center gap-1 items-center md:flex-row md:gap-6">
+				<div>
+					Results: {{info.count}}
+				</div>
+				<div>
+					Page {{page}} of {{info.pages}}
+				</div>
+				<div class="flex flex-row gap-2 justify-center">
+					<div v-if="info.prev"
+						 class="bg-blue-500 text-white py-2 px-4 rounded select-none cursor-pointer"
+						 @click="onPrev">
+						Prev
+					</div>
+					<div v-else
+						 class="bg-gray-300 text-gray-500 py-2 px-4 rounded select-none">
+						Prev
+					</div>
+
+					<div v-if="info.next"
+						 class="bg-blue-500 text-white py-2 px-4 rounded select-none cursor-pointer"
+						 @click="onNext">
+						Next
+					</div>
+					<div v-else
+						 class="bg-gray-300 text-gray-500 py-2 px-4 rounded select-none">
+						Next
+					</div>
+				</div>
+			</div>
+		</div>
 		<div v-if="entries"
 			 class="w-full border border-black rounded-md overflow-hidden">
 			<table>
@@ -98,7 +129,9 @@
 	export default {
 		setup() {
 			const input = ref();
+			const page = ref();
 			const useLiveApi = ref(true);
+			const info = ref();
 			const suggestions = ref(true);
 			const suggestionsIndex = ref();
 			const entries = ref();
@@ -112,10 +145,12 @@
 				try {
 					const response = await axios.get(apiUrl, {
 						params: {
-							name: name
+							name: name,
+							page: page.value
 						}
 					});
 
+					info.value = response.data.info;
 					return response.data.results;
 				}
 				catch {
@@ -128,7 +163,15 @@
 				suggestionsIndex.value = null;
 			}
 
+			function resetEntries() {
+				info.value = null;
+				entries.value = null;
+				page.value = 1;
+			}
+
 			async function showEntries(name) {
+				resetEntries();
+
 				entries.value =
 					await queryApi(name);
 			}
@@ -155,6 +198,8 @@
 			return {
 				input,
 				useLiveApi,
+				info,
+				page,
 				suggestions,
 				suggestionsIndex,
 				entries,
@@ -162,7 +207,7 @@
 				onEscape() {
 					if (!suggestions.value) {
 						input.value = null;
-						entries.value = null;
+						resetEntries();
 						return;
 					}
 
@@ -170,10 +215,7 @@
 				},
 
 				async onEnter() {
-					let value =
-						input.value;
-
-					if (suggestionsIndex.value >= 0)
+					if (suggestionsIndex.value != null)
 						input.value = suggestions.value[suggestionsIndex.value];
 
 					resetSuggestions();
@@ -182,6 +224,26 @@
 
 				async onUp() {
 					await handleArrows(-1);
+				},
+
+				async onDown() {
+					await handleArrows(1);
+				},
+
+				async onPrev() {
+					page.value--;
+					if (page.value < 1)
+						page.value = 1;
+
+					entries.value =
+						await queryApi(input.value);
+				},
+
+				async onNext() {
+					page.value++;
+
+					entries.value =
+						await queryApi(input.value);
 				},
 
 				async onDown() {
