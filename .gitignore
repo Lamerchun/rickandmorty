@@ -1,0 +1,18 @@
+# Application folders
+App_Data/
+
+# Build
+obj/
+bin/
+__Published/
+PublishProfiles/
+
+# Crap
+_notes/
+
+# User settings
+.vs/
+.config/
+*.user
+*.suo
+*.git

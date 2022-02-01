@@ -1,0 +1,1 @@
+dotnet dev-certs https -v -ep devcert.pfx -p 0123456789

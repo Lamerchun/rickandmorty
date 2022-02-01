@@ -1,0 +1,60 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<LangVersion>9.0</LangVersion>
+		<RootNamespace>us</RootNamespace>
+		<AssemblyName>us</AssemblyName>
+		<UserSecretsId>mudio</UserSecretsId>
+		<SpaRoot>_Client\</SpaRoot>
+		<DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+		<TypeScriptToolsVersion>4.3</TypeScriptToolsVersion>
+		<TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- Don't publish the SPA source files, but do show them in the project files list -->
+		<Content Remove="$(SpaRoot)**" />
+		<None Remove="$(SpaRoot)**" />
+		<None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+		<None Remove="$(SpaRoot)dist\**" />
+		<None Remove="App_Data\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.22" />
+		<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.22" />
+		<PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.5.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="RickAndMorty.Net.Api" Version="0.2.0" />
+		<TypeScriptCompile Remove="_Client\node_modules\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="App_Data\" />
+	</ItemGroup>
+
+	<Target Name="Vite" BeforeTargets="Build" Condition="('$(Configuration)' == 'Release') and Exists('_Client/vite.config.js')">
+		<!-- Ensure Node.js is installed -->
+		<Exec Command="node --version" ContinueOnError="true">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+		</Exec>
+		<Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+		<Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+
+		<!-- Build with Vite -->
+		<Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+		<Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
+
+		<!-- Prepare wwwroot -->
+		<ItemGroup>
+			<DistFiles Include="$(SpaRoot)dist\**" />
+		</ItemGroup>
+		<RemoveDir Directories="wwwroot\" />
+		<Message Importance="high" Text="Move dist to wwwroot..." />
+		<Move SourceFiles="@(DistFiles)" DestinationFiles="@(DistFiles->'wwwroot\%(RecursiveDir)%(Filename)%(Extension)')" />
+	</Target>
+
+	<ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
+</Project>

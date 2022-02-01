@@ -1,0 +1,37 @@
+a, div, span, img, ul, li, table, td, tr, input, button, select, textarea, form, fieldset, label, legend, img {
+	box-sizing: border-box;
+}
+
+input, button, select, textarea {
+	&:focus {
+		outline: 0;
+	}
+}
+
+textarea {
+	-webkit-appearance: none;
+	border-radius: 0;
+}
+
+input {
+	&:-webkit-autofill::first-line,
+	&:-webkit-autofill,
+	&:-webkit-autofill:hover,
+	&:-webkit-autofill:focus,
+	&:-webkit-autofill:active {
+		font-size: 1rem;
+		background-color: transparent;
+		transition: all 5000s ease-in-out 0s;
+	}
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+	-moz-appearance: textfield;
+}
