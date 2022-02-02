@@ -17,10 +17,8 @@
 				  :pages="info?.pages"
 				  @page="onPage" />
 
-		<div v-if="results"
-			 class="w-full border border-black rounded-md overflow-hidden">
-			<us-results :results="results" />
-		</div>
+		<us-results v-if="results"
+					:results="results" />
 	</div>
 </template>
 
@@ -42,14 +40,15 @@
 		},
 
 		setup() {
-			const input = ref();
-			const page = ref();
 			const useLiveApi = ref(true);
-			const info = ref();
-			const suggestions = ref(true);
-			const results = ref();
+			const input = ref();
 
+			const suggestions = ref(true);
 			const showSuggestions = ref(false);
+
+			const page = ref();
+			const info = ref();
+			const results = ref();
 			const showResults = ref(false);
 
 			watch(() => input.value, updateUI);
@@ -113,11 +112,13 @@
 			}
 
 			return {
-				input,
 				useLiveApi,
-				info,
-				page,
+				input,
+
 				suggestions,
+
+				page,
+				info,
 				results,
 
 				async onInput(newValue) {
