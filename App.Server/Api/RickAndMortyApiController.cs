@@ -1,25 +1,43 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+
 using RickAndMorty.Net.Api.Factory;
+using RickAndMorty.Net.Api.Service;
+using RickAndMorty.Net.Api.Models.Domain;
 
 namespace us
 {
 	[ApiController]
 	public class RickAndMortyApiController : ControllerBase
 	{
+		private readonly IMemoryCache _IMemoryCache;
+		private readonly IRickAndMortyService _IRickAndMortyService;
+
+		public RickAndMortyApiController(IMemoryCache memoryCache)
+		{
+			_IMemoryCache = memoryCache;
+			_IRickAndMortyService = RickAndMortyApiFactory.Create();
+		}
+
+		private Task<IEnumerable<Character>> FilterCachedAsync(string name)
+			=>
+			_IMemoryCache.GetOrCreateAsync(
+				$"Filter:{name?.Trim().ToLower()}",
+				async _ => await _IRickAndMortyService.FilterCharacters(name)
+			);
+
 		[HttpGet("Api/Character")]
 		public async Task<IActionResult> Characters(string name, int page)
 		{
-			var service =
-				RickAndMortyApiFactory.Create();
-
 			try
 			{
 				var characters =
-					await service.FilterCharacters(name);
+					await FilterCachedAsync(name);
 
 				var pageSize = 20;
 
@@ -53,7 +71,7 @@ namespace us
 						results = pagedCharacters
 					});
 			}
-			catch (NullReferenceException)
+			catch
 			{
 				return NotFound();
 			}
