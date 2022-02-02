@@ -1,6 +1,8 @@
 ﻿<template>
 	<div class="w-full md:w-[480px] text-center relative">
 		<div class="flex flex-row gap-4 items-center shadow-md bg-gray-50 px-6 rounded">
+			<div class="select-none grayscale text-lg">🔍</div>
+
 			<input class="w-full py-4 bg-gray-50"
 				   ref="inputDom"
 				   type="text"
@@ -15,7 +17,7 @@
 			<div v-if="modelValue"
 				 @click="onClear"
 				 class="flex p-4 cursor-pointer items-center justify-center text-xl rounded-full bg-gray-300 w-[30px] h-[30px]">
-				✕
+				<div class="relative bottom-[1px]">✕</div>
 			</div>
 		</div>
 
