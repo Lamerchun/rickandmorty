@@ -1,3 +1,5 @@
+using System.IO.Compression;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
@@ -5,6 +7,7 @@ using Microsoft.AspNetCore.StaticFiles;
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.ResponseCompression;
 
 namespace us
 {
@@ -54,7 +57,38 @@ namespace us
 
 		public virtual void ConfigureServices(IServiceCollection services)
 		{
-			services.AddResponseCompression();
+			services.AddResponseCompression(options =>
+			{
+				var MimeTypes = new[]
+				{
+					 "text/plain",
+					 "text/html",
+					 "text/json",
+					 "text/css",
+					 "font/woff2",
+					 "image/png",
+					 "image/x-icon",
+					 "image/svg+xml",
+					 "application/json",
+					 "application/javascript",
+					 "application/octet-stream"
+				 };
+
+				options.EnableForHttps = true;
+				options.MimeTypes = MimeTypes;
+				options.Providers.Add<GzipCompressionProvider>();
+				options.Providers.Add<BrotliCompressionProvider>();
+			});
+
+			services.Configure<GzipCompressionProviderOptions>(options =>
+			{
+				options.Level = CompressionLevel.Optimal;
+			});
+
+			services.Configure<BrotliCompressionProviderOptions>(options =>
+			{
+				options.Level = CompressionLevel.Optimal;
+			});
 
 			var controllerBuilder =
 				services
