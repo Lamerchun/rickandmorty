@@ -1,32 +1,8 @@
 ﻿<template>
 	<div class="flex flex-col gap-12 items-center">
 		<h1 class="text-5xl font-bold select-none">Rick &amp; Morty</h1>
-		<div>
-			<ul class="flex flex-row gap-8 select-none">
-				<li class="flex flex-row gap-2 cursor-pointer"
-					@click="useLiveApi = true">
-					<div class="relative rounded-full border border-black w-[30px] h-[30px]">
-						<div v-if="useLiveApi"
-							 class="m-1 absolute inset-0 rounded-full bg-black">
-						</div>
-					</div>
-					<div>
-						use live API
-					</div>
-				</li>
-				<li class="flex flex-row gap-2 cursor-pointer"
-					@click="useLiveApi = false">
-					<div class="relative rounded-full border border-black w-[30px] h-[30px]">
-						<div v-if="!useLiveApi"
-							 class="m-1 absolute inset-0 rounded-full bg-black">
-						</div>
-					</div>
-					<div>
-						use local API
-					</div>
-				</li>
-			</ul>
-		</div>
+
+		<us-switch v-model="useLiveApi" />
 
 		<us-input v-model="input"
 				  :suggestions="suggestions"
@@ -52,12 +28,14 @@
 	import { ref, watch } from 'vue'
 	import axios from 'axios'
 
+	import usSwitch from './components/switch.vue'
 	import usInput from './components/input.vue'
 	import usPager from './components/pager.vue'
 	import usResults from './components/results.vue'
 
 	export default {
 		components: {
+			usSwitch,
 			usInput,
 			usPager,
 			usResults
