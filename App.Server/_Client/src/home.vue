@@ -35,37 +35,12 @@
 				  @escape="onEscape"
 				  @enter="onEnter" />
 
-		<div v-if="results && info?.pages > 1">
-			<div class="flex flex-col text-center gap-1 items-center md:flex-row md:gap-6">
-				<div>
-					Results: {{info.count}}
-				</div>
-				<div>
-					Page {{page}} of {{info.pages}}
-				</div>
-				<div class="flex flex-row gap-2 justify-center">
-					<div v-if="info.prev"
-						 class="bg-blue-500 text-white py-2 px-4 rounded select-none cursor-pointer"
-						 @click="onPrev">
-						Prev
-					</div>
-					<div v-else
-						 class="bg-gray-300 text-gray-500 py-2 px-4 rounded select-none">
-						Prev
-					</div>
+		<us-pager v-if="results && info?.pages > 1"
+				  :page="page"
+				  :total="info?.count"
+				  :pages="info?.pages"
+				  @page="onPage" />
 
-					<div v-if="info.next"
-						 class="bg-blue-500 text-white py-2 px-4 rounded select-none cursor-pointer"
-						 @click="onNext">
-						Next
-					</div>
-					<div v-else
-						 class="bg-gray-300 text-gray-500 py-2 px-4 rounded select-none">
-						Next
-					</div>
-				</div>
-			</div>
-		</div>
 		<div v-if="results"
 			 class="w-full border border-black rounded-md overflow-hidden">
 			<table>
@@ -94,7 +69,6 @@
 							</li>
 							<li>
 								{{entry.species}}, {{entry.status}}
-
 							</li>
 						</ul>
 					</td>
@@ -115,10 +89,12 @@
 	import axios from 'axios'
 
 	import usInput from './components/input.vue'
+	import usPager from './components/pager.vue'
 
 	export default {
 		components: {
-			usInput
+			usInput,
+			usPager
 		},
 
 		setup() {
@@ -224,21 +200,8 @@
 					await updateUI(input.value);
 				},
 
-				async onPrev() {
-					page.value--;
-
-					if (page.value < 1)
-						page.value = 1;
-
-					results.value =
-						await queryApi(input.value);
-				},
-
-				async onNext() {
-					page.value++;
-
-					if (page.value > info.value.pages)
-						page.value = info.value.pages;
+				async onPage(pageNumber) {
+					page.value = pageNumber;
 
 					results.value =
 						await queryApi(input.value);
