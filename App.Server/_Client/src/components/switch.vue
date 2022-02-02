@@ -19,7 +19,7 @@
 				</div>
 			</div>
 			<div>
-				use local API
+				use proxy API
 			</div>
 		</li>
 	</ul>
