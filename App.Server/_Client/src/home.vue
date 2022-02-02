@@ -27,28 +27,15 @@
 				</li>
 			</ul>
 		</div>
-		<div class="w-full md:w-[480px] text-center relative">
-			<input class="w-full shadow-md bg-gray-50 px-6 py-4 rounded"
-				   type="text"
-				   spellcheck="false"
-				   v-model="input"
-				   @keyup.escape="onEscape"
-				   @keyup.enter="onEnter"
-				   @keyup.up="onUp"
-				   @keyup.down="onDown"
-				   @input="onInput" />
 
-			<ul v-if="suggestions?.length > 0"
-				class="p-2 absolute inset-x-0 select-none cursor-pointer bg-white rounded border border-gray-400">
-				<li v-for="(name, index) in suggestions"
-					class="p-2 rounded"
-					:class="{'bg-gray-100': suggestionsIndex == index}"
-					@click="onClickSuggestion(name)">
-					{{name}}
-				</li>
-			</ul>
-		</div>
-		<div v-if="info?.pages > 1">
+		<us-input v-model="input"
+				  :suggestions="suggestions"
+				  @input="onInput"
+				  @suggestion="onSuggestion"
+				  @escape="onEscape"
+				  @enter="onEnter" />
+
+		<div v-if="results && info?.pages > 1">
 			<div class="flex flex-col text-center gap-1 items-center md:flex-row md:gap-6">
 				<div>
 					Results: {{info.count}}
@@ -79,7 +66,7 @@
 				</div>
 			</div>
 		</div>
-		<div v-if="entries"
+		<div v-if="results"
 			 class="w-full border border-black rounded-md overflow-hidden">
 			<table>
 				<tr>
@@ -96,7 +83,7 @@
 						Origin
 					</th>
 				</tr>
-				<tr v-for="entry in entries">
+				<tr v-for="entry in results">
 					<td>
 						{{entry.id}}
 					</td>
@@ -124,18 +111,57 @@
 </template>
 
 <script>
-	import { ref } from 'vue'
+	import { ref, watch } from 'vue'
 	import axios from 'axios'
 
+	import usInput from './components/input.vue'
+
 	export default {
+		components: {
+			usInput
+		},
+
 		setup() {
 			const input = ref();
 			const page = ref();
 			const useLiveApi = ref(true);
 			const info = ref();
 			const suggestions = ref(true);
-			const suggestionsIndex = ref();
-			const entries = ref();
+			const results = ref();
+
+			const showSuggestions = ref(false);
+			const showResults = ref(false);
+
+			watch(() => input.value, updateUI);
+
+			async function updateUI(value) {
+				suggestions.value = null;
+
+				if (!value)
+					return;
+
+				const apiResults =
+					await queryApi(value);
+
+				if (!apiResults)
+					return;
+
+				if (showResults.value)
+					results.value = apiResults;
+
+				if (!showSuggestions.value)
+					return;
+
+				const names =
+					apiResults.reduce((a, x) => {
+						if (!a.includes(x.name))
+							a.push(x.name)
+
+						return a;
+					}, []);
+
+				suggestions.value = names.slice(0, 10);
+			}
 
 			async function queryApi(name) {
 				let apiUrl = 'https://rickandmortyapi.com/api/character/';
@@ -159,43 +185,11 @@
 				}
 			}
 
-			function resetSuggestions() {
-				suggestions.value = null;
-				suggestionsIndex.value = null;
-			}
-
-			function resetEntries() {
+			function resetResults() {
 				info.value = null;
-				entries.value = null;
+				results.value = null;
 				page.value = 1;
-			}
-
-			async function showEntries(name) {
-				resetEntries();
-
-				entries.value =
-					await queryApi(name);
-
-				resetSuggestions();
-			}
-
-			async function handleArrows(change) {
-				if (!suggestions.value)
-					return;
-
-				if (suggestionsIndex.value == undefined)
-					suggestionsIndex.value = -1;
-
-				suggestionsIndex.value += change;
-
-				const maxIndex =
-					suggestions.value.length - 1;
-
-				if (suggestionsIndex.value < 0)
-					suggestionsIndex.value = maxIndex;
-
-				if (suggestionsIndex.value > maxIndex)
-					suggestionsIndex.value = 0;
+				showResults.value = false;
 			}
 
 			return {
@@ -204,33 +198,30 @@
 				info,
 				page,
 				suggestions,
-				suggestionsIndex,
-				entries,
+				results,
+
+				async onInput(newValue) {
+					resetResults();
+					showSuggestions.value = true;
+					await updateUI(newValue);
+				},
 
 				onEscape() {
 					if (!suggestions.value) {
 						input.value = null;
-						resetEntries();
+						resetResults();
 						return;
 					}
 
-					resetSuggestions();
+					suggestions.value = null;
+					showSuggestions.value = false;
 				},
 
 				async onEnter() {
-					if (suggestionsIndex.value != null)
-						input.value = suggestions.value[suggestionsIndex.value];
-
-					resetSuggestions();
-					await showEntries(input.value);
-				},
-
-				async onUp() {
-					await handleArrows(-1);
-				},
-
-				async onDown() {
-					await handleArrows(1);
+					showResults.value = true;
+					suggestions.value = null;
+					showSuggestions.value = false;
+					await updateUI(input.value);
 				},
 
 				async onPrev() {
@@ -239,7 +230,7 @@
 					if (page.value < 1)
 						page.value = 1;
 
-					entries.value =
+					results.value =
 						await queryApi(input.value);
 				},
 
@@ -249,45 +240,16 @@
 					if (page.value > info.value.pages)
 						page.value = info.value.pages;
 
-					entries.value =
+					results.value =
 						await queryApi(input.value);
 				},
 
-				async onDown() {
-					await handleArrows(1);
-				},
-
-				async onInput() {
-					if (!input.value) {
-						resetSuggestions();
-						return;
-					}
-
-					resetEntries();
-
-					const results =
-						await queryApi(input.value);
-
-					if (!results) {
-						resetSuggestions();
-						return;
-					}
-
-					const names =
-						results.reduce((a, x) => {
-							if (!a.includes(x.name))
-								a.push(x.name)
-
-							return a;
-						}, []);
-
-					suggestions.value = names.slice(0, 10);
-				},
-
-				async onClickSuggestion(name) {
+				async onSuggestion(name) {
 					input.value = name;
 					suggestions.value = null;
-					await showEntries(name);
+					showSuggestions.value = false;
+					showResults.value = true;
+					await updateUI(input.value);
 				}
 			}
 		}
