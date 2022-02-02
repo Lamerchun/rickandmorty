@@ -30,6 +30,7 @@
 		<div class="w-full md:w-[480px] text-center relative">
 			<input class="w-full shadow-md bg-gray-50 px-6 py-4 rounded"
 				   type="text"
+				   spellcheck="false"
 				   v-model="input"
 				   @keyup.escape="onEscape"
 				   @keyup.enter="onEnter"
@@ -88,10 +89,10 @@
 					<th>
 						Name
 					</th>
-					<th class="text-center">
+					<th class="text-center hidden sm:table-cell">
 						Episodes
 					</th>
-					<th>
+					<th class="hidden sm:table-cell">
 						Origin
 					</th>
 				</tr>
@@ -110,10 +111,10 @@
 							</li>
 						</ul>
 					</td>
-					<td class="text-center">
+					<td class="text-center hidden sm:table-cell">
 						{{entry.episode?.length}}
 					</td>
-					<td>
+					<td class="hidden sm:table-cell">
 						{{entry.origin.name}}
 					</td>
 				</tr>
@@ -174,6 +175,8 @@
 
 				entries.value =
 					await queryApi(name);
+
+				resetSuggestions();
 			}
 
 			async function handleArrows(change) {
@@ -256,7 +259,7 @@
 						return;
 					}
 
-					entries.value = null;
+					resetEntries();
 
 					const results =
 						await queryApi(input.value);
