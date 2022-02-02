@@ -39,7 +39,7 @@
 
 	export default {
 		props: ['modelValue', 'suggestions'],
-		emits: ['enter', 'escape', 'suggestion', 'input', 'clear'],
+		emits: ['update:modelValue', 'enter', 'escape', 'suggestion', 'input', 'clear'],
 
 		setup(props, { emit }) {
 			const inputDom = ref();
