@@ -1,6 +1,7 @@
 ﻿<template>
 	<div class="w-full md:w-[480px] text-center relative">
-		<input class="w-full shadow-md bg-gray-50 px-6 py-4 rounded"
+		<input class="w-full shadow-md bg-gray-50 px-6 py-4 pr-14 rounded"
+			   ref="inputDom"
 			   type="text"
 			   spellcheck="false"
 			   v-model="modelValue"
@@ -9,6 +10,12 @@
 			   @keyup.up="onUp"
 			   @keyup.down="onDown"
 			   @input="$emit('input', modelValue);$emit('update:modelValue', modelValue);" />
+
+		<div v-if="modelValue"
+			 @click="onClear"
+			 class="flex cursor-pointer items-center justify-center absolute top-2 right-4 text-xl rounded-full bg-gray-300 w-[40px] h-[40px]">
+			✕
+		</div>
 
 		<ul v-if="suggestions?.length > 0"
 			class="p-2 absolute inset-x-0 select-none cursor-pointer bg-white rounded border border-gray-400">
@@ -30,6 +37,7 @@
 		emits: ['enter', 'escape', 'suggestion', 'input'],
 
 		setup(props, { emit }) {
+			const inputDom = ref();
 			const suggestionsIndex = ref();
 
 			watch(() => props.suggestions, () => suggestionsIndex.value = null);
@@ -54,7 +62,13 @@
 			}
 
 			return {
+				inputDom,
 				suggestionsIndex,
+
+				onClear() {
+					emit('update:modelValue', null);
+					inputDom.value.focus();
+				},
 
 				onEscape() {
 					emit('escape');
