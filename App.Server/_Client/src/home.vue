@@ -7,6 +7,7 @@
 		<us-input v-model="input"
 				  :suggestions="suggestions"
 				  @input="onInput"
+				  @clear="onClear"
 				  @suggestion="onSuggestion"
 				  @escape="onEscape"
 				  @enter="onEnter" />
@@ -125,6 +126,13 @@
 					resetResults();
 					showSuggestions.value = true;
 					await updateUI(newValue);
+				},
+
+				async onClear() {
+					resetResults();
+					input.value = null;
+					suggestions.value = null;
+					showSuggestions.value = false;
 				},
 
 				onEscape() {

@@ -36,7 +36,7 @@
 
 	export default {
 		props: ['modelValue', 'suggestions'],
-		emits: ['enter', 'escape', 'suggestion', 'input'],
+		emits: ['enter', 'escape', 'suggestion', 'input', 'clear'],
 
 		setup(props, { emit }) {
 			const inputDom = ref();
@@ -68,7 +68,7 @@
 				suggestionsIndex,
 
 				onClear() {
-					emit('update:modelValue', null);
+					emit('clear');
 					inputDom.value.focus();
 				},
 
