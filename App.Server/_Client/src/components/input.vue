@@ -1,20 +1,22 @@
 ﻿<template>
 	<div class="w-full md:w-[480px] text-center relative">
-		<input class="w-full shadow-md bg-gray-50 px-6 py-4 pr-14 rounded"
-			   ref="inputDom"
-			   type="text"
-			   spellcheck="false"
-			   v-model="modelValue"
-			   @keyup.escape="onEscape"
-			   @keyup.enter="onEnter"
-			   @keyup.up="onUp"
-			   @keyup.down="onDown"
-			   @input="$emit('input', modelValue);$emit('update:modelValue', modelValue);" />
+		<div class="flex flex-row gap-4 items-center shadow-md bg-gray-50 px-6 rounded">
+			<input class="w-full py-4 bg-gray-50"
+				   ref="inputDom"
+				   type="text"
+				   spellcheck="false"
+				   v-model="modelValue"
+				   @keyup.escape="onEscape"
+				   @keyup.enter="onEnter"
+				   @keyup.up="onUp"
+				   @keyup.down="onDown"
+				   @input="$emit('input', modelValue);$emit('update:modelValue', modelValue);" />
 
-		<div v-if="modelValue"
-			 @click="onClear"
-			 class="flex cursor-pointer items-center justify-center absolute top-2 right-4 text-xl rounded-full bg-gray-300 w-[40px] h-[40px]">
-			✕
+			<div v-if="modelValue"
+				 @click="onClear"
+				 class="flex p-4 cursor-pointer items-center justify-center text-xl rounded-full bg-gray-300 w-[30px] h-[30px]">
+				✕
+			</div>
 		</div>
 
 		<ul v-if="suggestions?.length > 0"
