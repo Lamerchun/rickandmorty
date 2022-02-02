@@ -40,8 +40,6 @@ namespace us
 
 		public async Task<string> GetUrlAsync(string url, Dictionary<string, string> parameters)
 		{
-			string result = null;
-
 			using var client = new CustomWebClient();
 			EnsureHeaders(client);
 
@@ -55,9 +53,7 @@ namespace us
 
 			using var stream = client.OpenRead(url);
 			using var reader = new StreamReader(stream);
-			result = await reader.ReadToEndAsync();
-
-			return result;
+			return await reader.ReadToEndAsync();
 		}
 
 		#endregion
