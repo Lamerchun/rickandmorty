@@ -20,6 +20,11 @@
 
 		<us-results v-if="results"
 					:results="results" />
+
+		<div v-if="notFound"
+			 class="bg-pink-300 px-4 py-2 rounded">
+			No records match your search
+		</div>
 	</div>
 </template>
 
@@ -51,12 +56,14 @@
 			const info = ref();
 			const results = ref();
 			const showResults = ref(false);
+			const notFound = ref(false);
 
 			watch(() => input.value, updateUI);
 
 			async function updateUI(value) {
 				if (!value) {
 					suggestions.value = null;
+					notFound.value = false;
 					return;
 				}
 
@@ -65,8 +72,11 @@
 
 				if (!apiResults) {
 					suggestions.value = null;
+					notFound.value = true;
 					return;
 				}
+
+				notFound.value = false;
 
 				if (showResults.value)
 					results.value = apiResults;
@@ -122,6 +132,8 @@
 
 				page,
 				info,
+
+				notFound,
 				results,
 
 				async onInput(newValue) {
