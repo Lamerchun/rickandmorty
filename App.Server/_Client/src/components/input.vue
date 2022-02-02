@@ -26,6 +26,7 @@
 			<li v-for="(name, index) in suggestions"
 				class="p-2 rounded"
 				:class="{'bg-gray-100': suggestionsIndex == index}"
+				@mouseenter="suggestionsIndex = index"
 				@click="onClickSuggestion(name)">
 				{{name}}
 			</li>
