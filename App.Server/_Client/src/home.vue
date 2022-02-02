@@ -235,6 +235,7 @@
 
 				async onPrev() {
 					page.value--;
+
 					if (page.value < 1)
 						page.value = 1;
 
@@ -244,6 +245,9 @@
 
 				async onNext() {
 					page.value++;
+
+					if (page.value > info.value.pages)
+						page.value = info.value.pages;
 
 					entries.value =
 						await queryApi(input.value);
