@@ -47,18 +47,7 @@ namespace us
 				var response =
 					await FilterCachedAsync(name, page);
 
-				return Ok(
-					new
-					{
-						info = new
-						{
-							count = response.Info.Count,
-							pages = response.Info.Pages,
-							prev = !string.IsNullOrWhiteSpace(response.Info.Prev),
-							next = !string.IsNullOrWhiteSpace(response.Info.Next)
-						},
-						results = response.Results
-					});
+				return Ok(response);
 			}
 			catch
 			{

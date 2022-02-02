@@ -14,6 +14,9 @@ namespace us
 			IApplicationBuilder app,
 			IWebHostEnvironment env)
 		{
+			app.UseHttpsRedirection();
+			app.UseResponseCompression();
+
 			if (env.IsDevelopment())
 			{
 				app.UseViteRunningCheck();
@@ -24,8 +27,6 @@ namespace us
 				app.UseExceptionHandler("/Error");
 				app.UseHsts();
 			}
-
-			app.UseHttpsRedirection();
 
 			var provider = new FileExtensionContentTypeProvider();
 			provider.Mappings[".vue"] = "application/javascript";
@@ -51,9 +52,10 @@ namespace us
 			app.UseViteProxy();
 		}
 
-
 		public virtual void ConfigureServices(IServiceCollection services)
 		{
+			services.AddResponseCompression();
+
 			var controllerBuilder =
 				services
 					.AddMvc()

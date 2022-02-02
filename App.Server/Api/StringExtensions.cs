@@ -5,10 +5,6 @@ namespace us
 {
 	public static class JObjectExtensions
 	{
-		private static readonly JsonSerializerSettings _CamelCaseSettings
-			= new() { ContractResolver = new CamelCasePropertyNamesContractResolver() };
-
-
 		private static JsonSerializerSettings _SerializerSettings = null;
 		private static JsonSerializerSettings SerializerSettings
 		{
@@ -34,9 +30,6 @@ namespace us
 				TypeNameHandling = TypeNameHandling.Auto,
 				MissingMemberHandling = MissingMemberHandling.Ignore
 			};
-
-		public static string ToJson(this object instance)
-			=> JsonConvert.SerializeObject(instance, Formatting.None, _CamelCaseSettings);
 
 		public static T ToObjectByJson<T>(this string instance)
 		{
