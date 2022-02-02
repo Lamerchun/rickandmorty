@@ -55,16 +55,18 @@
 			watch(() => input.value, updateUI);
 
 			async function updateUI(value) {
-				suggestions.value = null;
-
-				if (!value)
+				if (!value) {
+					suggestions.value = null;
 					return;
+				}
 
 				const apiResults =
 					await queryApi(value);
 
-				if (!apiResults)
+				if (!apiResults) {
+					suggestions.value = null;
 					return;
+				}
 
 				if (showResults.value)
 					results.value = apiResults;
