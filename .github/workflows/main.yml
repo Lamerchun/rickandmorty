@@ -1,22 +1,37 @@
 name: dotnet package
 
-on: [push]
-
+on:
+  push:
+    branches:
+      - main
 jobs:
-  build:
+  deployment:
 
     runs-on: ubuntu-latest
+    environment: host
     strategy:
       matrix:
         dotnet: [ '6.x' ]
 
     steps:
         - uses: actions/checkout@v2
+
         - name: Setup dotnet
           uses: actions/setup-dotnet@v1
           with:
             dotnet-version: '6.x'
+
         - name: Install dependencies
           run: dotnet restore
+
         - name: Build
           run: dotnet build --configuration Release
+
+        - name: Sync FTP
+          uses: socram8888/ftp-hash-sync@v1
+          with:
+            host: ${{ secrets.FTP_HOST }}
+            username: ${{ secrets.FTP_USER }}
+            password: ${{ secrets.FTP_PASSWORD }}
+            source: ./App.Server/bin/Release/net6.0/
+            destination: rickandmorty-${{ env.GITHUB_REF_NAME }}
