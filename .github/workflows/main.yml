@@ -38,6 +38,6 @@ jobs:
         - name: Sync FTP
           shell: pwsh
           run: |
-            ./Task/ftp-take-offline.ps1
-            ./Task/ftp-sync.ps1
-            ./Task/ftp-take-online.ps1
+            ./.github/workflows/Task/ftp-take-offline.ps1
+            ./.github/workflows/Task/ftp-sync.ps1
+            ./.github/workflows/Task/ftp-take-online.ps1
