@@ -34,4 +34,4 @@ jobs:
             username: ${{ secrets.FTP_USER }}
             password: ${{ secrets.FTP_PASSWORD }}
             source: ./App.Server/bin/Release/net6.0/
-            destination: rickandmorty-${{ env.GITHUB_REF_NAME }}
+            destination: rickandmorty-${{ github.GITHUB_REF_NAME }}
