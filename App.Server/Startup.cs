@@ -9,58 +9,58 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.ResponseCompression;
 
-namespace us
+namespace us;
+
+public class Startup
 {
-	public class Startup
+	public virtual void Configure(
+		IApplicationBuilder app,
+		IWebHostEnvironment env)
 	{
-		public virtual void Configure(
-			IApplicationBuilder app,
-			IWebHostEnvironment env)
+		app.UseHttpsRedirection();
+		app.UseResponseCompression();
+
+		if (env.IsDevelopment())
 		{
-			app.UseHttpsRedirection();
-			app.UseResponseCompression();
-
-			if (env.IsDevelopment())
-			{
-				app.UseViteRunningCheck();
-				app.UseDeveloperExceptionPage();
-			}
-			else
-			{
-				app.UseExceptionHandler("/Error");
-				app.UseHsts();
-			}
-
-			var provider = new FileExtensionContentTypeProvider();
-			provider.Mappings[".vue"] = "application/javascript";
-
-			app.UseStaticFiles(new StaticFileOptions
-			{
-				ServeUnknownFileTypes = true,
-				DefaultContentType = "application/octet-stream",
-				ContentTypeProvider = provider
-			});
-
-			app.UseStaticFiles();
-			app.UseRouting();
-
-			app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapControllers();
-				endpoints.MapFallbackToPage("/", "/Index");
-				endpoints.MapFallbackToPage("/{page}", "/Index");
-				app.UseViteNodeModules(env);
-			});
-
-			app.UseViteProxy();
+			app.UseViteRunningCheck();
+			app.UseDeveloperExceptionPage();
+		}
+		else
+		{
+			app.UseExceptionHandler("/Error");
+			app.UseHsts();
 		}
 
-		public virtual void ConfigureServices(IServiceCollection services)
+		var provider = new FileExtensionContentTypeProvider();
+		provider.Mappings[".vue"] = "application/javascript";
+
+		app.UseStaticFiles(new StaticFileOptions
 		{
-			services.AddResponseCompression(options =>
+			ServeUnknownFileTypes = true,
+			DefaultContentType = "application/octet-stream",
+			ContentTypeProvider = provider
+		});
+
+		app.UseStaticFiles();
+		app.UseRouting();
+
+		app.UseEndpoints(endpoints =>
+		{
+			endpoints.MapControllers();
+			endpoints.MapFallbackToPage("/", "/Index");
+			endpoints.MapFallbackToPage("/{page}", "/Index");
+			app.UseViteNodeModules(env);
+		});
+
+		app.UseViteProxy();
+	}
+
+	public virtual void ConfigureServices(IServiceCollection services)
+	{
+		services.AddResponseCompression(options =>
+		{
+			var MimeTypes = new[]
 			{
-				var MimeTypes = new[]
-				{
 					 "text/plain",
 					 "text/html",
 					 "text/json",
@@ -74,36 +74,36 @@ namespace us
 					 "application/octet-stream"
 				 };
 
-				options.EnableForHttps = true;
-				options.MimeTypes = MimeTypes;
-				options.Providers.Add<GzipCompressionProvider>();
-				options.Providers.Add<BrotliCompressionProvider>();
-			});
+			options.EnableForHttps = true;
+			options.MimeTypes = MimeTypes;
+			options.Providers.Add<GzipCompressionProvider>();
+			options.Providers.Add<BrotliCompressionProvider>();
+		});
 
-			services.Configure<GzipCompressionProviderOptions>(options =>
-			{
-				options.Level = CompressionLevel.Optimal;
-			});
+		services.Configure<GzipCompressionProviderOptions>(options =>
+		{
+			options.Level = CompressionLevel.Optimal;
+		});
 
-			services.Configure<BrotliCompressionProviderOptions>(options =>
-			{
-				options.Level = CompressionLevel.Optimal;
-			});
+		services.Configure<BrotliCompressionProviderOptions>(options =>
+		{
+			options.Level = CompressionLevel.Optimal;
+		});
 
-			var controllerBuilder =
-				services
-					.AddMvc()
-					.AddControllersAsServices()
-					.ConfigureApiBehaviorOptions(options =>
-					{
-						options.InvalidModelStateResponseFactory =
-							context => new BadRequestObjectResult(context.ModelState);
-					});
+		var controllerBuilder =
+			services
+				.AddMvc()
+				.AddControllersAsServices()
+				.ConfigureApiBehaviorOptions(options =>
+				{
+					options.InvalidModelStateResponseFactory =
+						context => new BadRequestObjectResult(context.ModelState);
+				});
 
-			controllerBuilder.AddNewtonsoftJson(x =>
-			{
-				x.SerializerSettings.FloatParseHandling = Newtonsoft.Json.FloatParseHandling.Double;
-			});
-		}
+		controllerBuilder.AddNewtonsoftJson(x =>
+		{
+			x.SerializerSettings.FloatParseHandling = Newtonsoft.Json.FloatParseHandling.Double;
+		});
 	}
 }
+
