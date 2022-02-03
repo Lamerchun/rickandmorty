@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ public class SimpleWebClient : IDisposable
 			_HttpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
 	}
 
-	public async Task<string> GetUrlAsync(string url, Dictionary<string, string> parameters)
+	public async Task<SimpleHttpResponse<string>> GetUrlAsStringAsync(string url, Dictionary<string, string> parameters)
 	{
 		var pairs =
 			parameters.Select(x => $"{x.Key}={x.Value}");
@@ -32,11 +33,24 @@ public class SimpleWebClient : IDisposable
 		using var response =
 			await _HttpClient.GetAsync(url);
 
-		return await response.Content.ReadAsStringAsync();
+		var content =
+			await response.Content.ReadAsStringAsync();
+
+		return new SimpleHttpResponse<string>
+		{
+			Content = content,
+			Status = response.StatusCode
+		};
 	}
 
 	public void Dispose()
 	{
 		_HttpClient.Dispose();
 	}
+}
+
+public class SimpleHttpResponse<T>
+{
+	public T Content { get; set; }
+	public HttpStatusCode Status { get; set; }
 }
