@@ -4,6 +4,14 @@ on:
   push:
     branches:
       - main
+
+env:
+  SERVER: ${{ secrets.FTP_HOST }}
+  USER: ${{ secrets.FTP_USER }}
+  PASSWORD: ${{ secrets.FTP_PASSWORD }}
+  ARTIFACT_DIRECTORY: ./App.Server/bin/Release/net6.0/
+  REMOTE_DIRECTORY: rickandmorty-${{ github.ref_name }}
+
 jobs:
   deployment:
 
@@ -28,10 +36,8 @@ jobs:
           run: dotnet build --configuration Release
 
         - name: Sync FTP
-          uses: socram8888/ftp-hash-sync@v1
-          with:
-            host: ${{ secrets.FTP_HOST }}
-            username: ${{ secrets.FTP_USER }}
-            password: ${{ secrets.FTP_PASSWORD }}
-            source: ./App.Server/bin/Release/net6.0/
-            destination: rickandmorty-${{ github.ref_name }}
+          shell: pwsh
+          run: |
+            .\Task\ftp-take-offline.ps1
+            .\Task\ftp-sync.ps1
+            .\Task\ftp-take-online.ps1
