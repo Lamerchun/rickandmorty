@@ -29,7 +29,7 @@
 </template>
 
 <script>
-	import { ref, watch } from 'vue'
+	import { ref, watch, onMounted, onUnmounted } from 'vue'
 	import axios from 'axios'
 
 	import usSwitch from './components/switch.vue'
@@ -124,6 +124,19 @@
 				showResults.value = false;
 			}
 
+			function onBodyClick() {
+				suggestions.value = null;
+				showSuggestions.value = false;
+			}
+
+			onMounted(() => {
+				document.addEventListener("click", onBodyClick);
+			});
+
+			onUnmounted(() => {
+				document.removeEventListener("click", onBodyClick);
+			});
+
 			return {
 				useLiveApi,
 				input,
@@ -139,7 +152,6 @@
 				async onInput(newValue) {
 					resetResults();
 					showSuggestions.value = true;
-					await updateUI(newValue);
 				},
 
 				async onClear() {
