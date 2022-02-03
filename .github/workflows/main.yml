@@ -8,7 +8,7 @@ jobs:
   deployment:
 
     runs-on: ubuntu-latest
-    environment: host
+    environment: Host
     strategy:
       matrix:
         dotnet: [ '6.x' ]
