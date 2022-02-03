@@ -4,55 +4,54 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace us
+namespace us;
+
+[ApiController]
+public partial class RickAndMortyApiController : ControllerBase
 {
-	[ApiController]
-	public partial class RickAndMortyApiController : ControllerBase
+	private readonly IMemoryCache _IMemoryCache;
+	private readonly SimpleWebClient _SimpleWebClient = new();
+
+	public RickAndMortyApiController(IMemoryCache memoryCache)
 	{
-		private readonly IMemoryCache _IMemoryCache;
-		private readonly SimpleWebClient _SimpleWebClient = new();
+		_IMemoryCache = memoryCache;
+	}
 
-		public RickAndMortyApiController(IMemoryCache memoryCache)
-		{
-			_IMemoryCache = memoryCache;
-		}
-
-		private Task<CharacterResponse> FilterCachedAsync(string name, int page)
-			=>
-			_IMemoryCache.GetOrCreateAsync(
-				$"Filter:{name?.Trim().ToLower()}:{page}",
-				async _ =>
-				{
-					var rawResponse =
-						await _SimpleWebClient.GetUrlAsync(
-							$"https://rickandmortyapi.com/api/character/",
-							new Dictionary<string, string>
-							{
+	private Task<CharacterResponse> FilterCachedAsync(string name, int page)
+		=>
+		_IMemoryCache.GetOrCreateAsync(
+			$"Filter:{name?.Trim().ToLower()}:{page}",
+			async _ =>
+			{
+				var rawResponse =
+					await _SimpleWebClient.GetUrlAsync(
+						$"https://rickandmortyapi.com/api/character/",
+						new Dictionary<string, string>
+						{
 								{ "name", name },
 								{ "page", page.ToString() }
-							});
+						});
 
-					return rawResponse.ToObjectByJson<CharacterResponse>();
-				}
-			);
+				return rawResponse.ToObjectByJson<CharacterResponse>();
+			}
+		);
 
-		[HttpGet("Api/Character")]
-		public async Task<IActionResult> Characters(string name, int page)
+	[HttpGet("Api/Character")]
+	public async Task<IActionResult> Characters(string name, int page)
+	{
+		try
 		{
-			try
-			{
-				if (page < 1)
-					page = 1;
+			if (page < 1)
+				page = 1;
 
-				var response =
-					await FilterCachedAsync(name, page);
+			var response =
+				await FilterCachedAsync(name, page);
 
-				return Ok(response);
-			}
-			catch
-			{
-				return NotFound();
-			}
+			return Ok(response);
+		}
+		catch
+		{
+			return NotFound();
 		}
 	}
 }
