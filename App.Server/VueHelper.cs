@@ -4,9 +4,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.FileProviders;
 
 namespace us;
 
@@ -39,15 +37,4 @@ public static class VueHelper
 			.GetActiveTcpListeners()
 			.Select(x => x.Port)
 			.Contains(_DevServerPort);
-
-	public static void UseViteNodeModules(this IApplicationBuilder app, IWebHostEnvironment env)
-	{
-		var node_modules_path = "node_modules";
-
-		app.UseStaticFiles(new StaticFileOptions
-		{
-			FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "_Client/" + node_modules_path + "/.vite")),
-			RequestPath = "/" + node_modules_path + "/.vite"
-		});
-	}
 }

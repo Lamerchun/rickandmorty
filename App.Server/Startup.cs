@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.AspNetCore.ResponseCompression;
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.ResponseCompression;
 
 namespace us;
 
@@ -47,9 +47,6 @@ public class Startup
 		app.UseEndpoints(endpoints =>
 		{
 			endpoints.MapControllers();
-			endpoints.MapFallbackToPage("/", "/Index");
-			endpoints.MapFallbackToPage("/{page}", "/Index");
-			app.UseViteNodeModules(env);
 		});
 
 		app.UseViteProxy();
