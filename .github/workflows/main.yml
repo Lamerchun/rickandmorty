@@ -20,14 +20,3 @@ jobs:
           run: dotnet restore
         - name: Build
           run: dotnet build --configuration Release
-        - name: Set up Node.js version
-          uses: actions/setup-node@v1
-          with:
-            node-version: '12.x'
-        - name: npm install, build
-          run: |
-            cd App.Server/_Client
-            npm install
-            npm run build
-            mkdir ../bin/Release/net6.0/wwwroot/
-            mv dist/** ../bin/Release/net6.0/wwwroot/**
