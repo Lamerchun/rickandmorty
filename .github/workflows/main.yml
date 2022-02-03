@@ -36,9 +36,17 @@ jobs:
         - name: Build
           run: dotnet build --configuration Release
 
-        - name: Sync FTP
+        - name: Take app offline
           shell: pwsh
           run: |
             ./.github/workflows/Task/ftp-take-offline.ps1
+
+        - name: Sync FTP
+          shell: pwsh
+          run: |
             ./.github/workflows/Task/ftp-sync.ps1
+
+        - name: Take app online
+          shell: pwsh
+          run: |
             ./.github/workflows/Task/ftp-take-online.ps1
