@@ -1,6 +1,6 @@
 # The Rick and Morty
 
-This excercise implements a simple client / server for [The Rick and Morty API](https://rickandmortyapi.com). Both REST and GraphQL are implemented for a simple character search by name.
+This excercise implements a simple client / server for [The Rick and Morty API](https://rickandmortyapi.com). Both REST and [GraphQL](https://graphql.org/) are implemented for a simple character search by name.
 
 ## Technology used
 
