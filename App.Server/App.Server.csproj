@@ -48,12 +48,6 @@
 		</ItemGroup>
 		<RemoveDir Directories="wwwroot\" />
 		<Message Importance="high" Text="Move dist to wwwroot..." />
-		<Move SourceFiles="@(DistFiles)" DestinationFiles="@(DistFiles->'bin\Release\net6.0\wwwroot\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Move SourceFiles="@(DistFiles)" DestinationFiles="@(DistFiles->'wwwroot\%(RecursiveDir)%(Filename)%(Extension)')" />
 	</Target>
-
-	<ProjectExtensions>
-		<VisualStudio>
-			<UserProperties />
-		</VisualStudio>
-	</ProjectExtensions>
 </Project>

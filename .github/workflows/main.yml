@@ -9,7 +9,7 @@ env:
   SERVER: ${{ secrets.FTP_HOST }}
   USER: ${{ secrets.FTP_USER }}
   PASSWORD: ${{ secrets.FTP_PASSWORD }}
-  ARTIFACT_DIRECTORY: ./App.Server/bin/Release/net6.0/
+  ARTIFACT_DIRECTORY: ./App.Server/bin/Release/net6.0/publish/
   REMOTE_DIRECTORY: rickandmorty-${{ github.ref_name }}
   LIB_DIRECTORY : ./.github/workflows
 
@@ -34,7 +34,7 @@ jobs:
           run: dotnet restore
 
         - name: Build
-          run: dotnet build --configuration Release
+          run: dotnet publish --configuration Release
 
         - name: Take app offline
           shell: pwsh
