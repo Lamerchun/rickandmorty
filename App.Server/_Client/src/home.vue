@@ -2,7 +2,10 @@
 	<div class="flex flex-col gap-12 items-center">
 		<h1 class="text-5xl font-bold select-none">Rick &amp; Morty</h1>
 
-		<us-switch v-model="useLiveApi" />
+		<div class="flex flex-col gap-4 items-center">
+			<us-query-switch v-model="useGraphQL" />
+			<us-host-switch v-model="useLiveApi" />
+		</div>
 
 		<us-input v-model="input"
 				  :suggestions="suggestions"
@@ -32,20 +35,23 @@
 	import { ref, watch, onMounted, onUnmounted } from 'vue'
 	import axios from 'axios'
 
-	import usSwitch from './components/switch.vue'
+	import usQuerySwitch from './components/query-switch.vue'
+	import usHostSwitch from './components/host-switch.vue'
 	import usInput from './components/input.vue'
 	import usPager from './components/pager.vue'
 	import usResults from './components/results.vue'
 
 	export default {
 		components: {
-			usSwitch,
+			usQuerySwitch,
+			usHostSwitch,
 			usInput,
 			usPager,
 			usResults
 		},
 
 		setup() {
+			const useGraphQL = ref(true);
 			const useLiveApi = ref(true);
 			const input = ref();
 
@@ -96,6 +102,11 @@
 			}
 
 			async function queryApi(name) {
+				if (useGraphQL.value) return await queryGraphQL(name);
+				else return await queryREST(name);
+			}
+
+			async function queryREST(name) {
 				let apiUrl = 'https://rickandmortyapi.com/api/character/';
 
 				if (!useLiveApi.value)
@@ -111,6 +122,47 @@
 
 					info.value = response.data.info;
 					return response.data.results;
+				}
+				catch {
+					return null;
+				}
+			}
+
+			async function queryGraphQL(name) {
+				let apiUrl = 'https://rickandmortyapi.com/graphql';
+
+				if (!useLiveApi.value)
+					apiUrl = '/graphQL';
+
+				try {
+					const response = await axios.post(apiUrl, {
+						query:
+							`
+									{
+									  characters(page: ${page.value}, filter: { name: "${name}" }) {
+										info {
+										  count
+										  pages
+										}
+										results {
+										  id
+										  name
+										  species
+										  status
+										  episode {
+											name
+										  }
+										  origin {
+											name
+										  }
+										}
+									  }
+									}
+								`
+					});
+
+					info.value = response.data.data.characters.info;
+					return response.data.data.characters.results;
 				}
 				catch {
 					return null;
@@ -138,6 +190,7 @@
 			});
 
 			return {
+				useGraphQL,
 				useLiveApi,
 				input,
 

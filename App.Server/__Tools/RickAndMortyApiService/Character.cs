@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace us;
 
@@ -14,7 +15,12 @@ public class Character
 	public string Type { get; set; }
 	public string Gender { get; set; }
 
-	public List<string> Episode { get; set; } = new();
+	[JsonProperty("Episode")]
+	public List<string> Episodes { get; set; } = new();
+
+	[JsonIgnore]
+	public List<CharacterEpisode> Episode { get; set; } = new();
+
 	public CharacterSubData Location { get; set; } = new();
 	public CharacterSubData Origin { get; set; } = new();
 }
@@ -23,4 +29,9 @@ public class CharacterSubData
 {
 	public string Name { get; set; }
 	public string Url { get; set; }
+}
+
+public class CharacterEpisode
+{
+	public string Name { get; set; }
 }

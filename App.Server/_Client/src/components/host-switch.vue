@@ -8,7 +8,7 @@
 				</div>
 			</div>
 			<div>
-				use live API
+				live API
 			</div>
 		</li>
 		<li class="flex flex-row gap-2 cursor-pointer"
@@ -19,7 +19,7 @@
 				</div>
 			</div>
 			<div>
-				use proxy API
+				proxy API
 			</div>
 		</li>
 	</ul>

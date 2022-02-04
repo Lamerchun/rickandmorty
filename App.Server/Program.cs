@@ -27,6 +27,10 @@ builder.Services.AddSingleton<IRickAndMortyApiService>(
 		x.GetRequiredService<ISimpleWebClient>())
 	);
 
+builder.Services
+	.AddGraphQLServer()
+	.AddQueryType<CharacterGraphQLQuery>();
+
 var app = builder.Build();
 
 app.UseHsts();
@@ -34,7 +38,14 @@ app.UseResponseCompression();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.UseRouting().UseEndpoints(x => x.MapControllers());
+app
+	.UseRouting()
+	.UseEndpoints(
+		x =>
+		{
+			x.MapControllers();
+			x.MapGraphQL();
+		});
 
 if (app.Environment.IsDevelopment())
 {
