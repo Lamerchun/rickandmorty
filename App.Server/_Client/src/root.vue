@@ -3,10 +3,10 @@
 		<main>
 			<router-view />
 		</main>
-		<footer class="flex flex-col gap-6">
+		<footer class="flex flex-col gap-6 text-center">
 			<hr />
 			<p>
-				&copy; 2022
+				<a class="pd:hover:underline underline-offset-4" href="https://github.com/Lamerchun/rickandmorty">Fork me on Github</a>
 			</p>
 		</footer>
 	</div>

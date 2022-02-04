@@ -5,9 +5,10 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Server", "App.Server\App.Server.csproj", "{54F20792-926D-4371-9150-97760C6B19F5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "actions", "actions", "{E92EC122-823D-4E98-8156-102DE422C2E6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{E92EC122-823D-4E98-8156-102DE422C2E6}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\main.yml = .github\workflows\main.yml
+		README.md = README.md
 	EndProjectSection
 EndProject
 Global

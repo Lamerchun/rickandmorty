@@ -23,11 +23,11 @@ public class Startup
 		else
 		{
 			app.UseHsts();
+			app.UseDefaultFiles();
+			app.UseStaticFiles();
 		}
 
 		app.UseRouting();
-		app.UseDefaultFiles();
-		app.UseStaticFiles();
 
 		app.UseEndpoints(endpoints =>
 		{
