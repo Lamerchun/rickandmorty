@@ -2,13 +2,10 @@
 
 namespace us;
 
-public partial class RickAndMortyApiController
+public class CharacterResponse
 {
-	public class CharacterResponse
-	{
-		public CharacterResponseInfo Info { get; set; }
-		public List<Character> Results { get; set; }
-	}
+	public CharacterResponseInfo Info { get; set; }
+	public List<Character> Results { get; set; }
 }
 
 public class CharacterResponseInfo

@@ -1,49 +1,16 @@
-﻿using System.Net;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace us;
 
 [ApiController]
 public partial class RickAndMortyApiController : ControllerBase
 {
-	private readonly IMemoryCache _IMemoryCache;
-	private readonly ISimpleWebClient _SimpleWebClient;
+	private readonly IRickAndMortyApiService _RickAndMortyApiService;
 
-	public RickAndMortyApiController(IMemoryCache memoryCache, ISimpleWebClient simpleWebClient)
+	public RickAndMortyApiController(IRickAndMortyApiService rickAndMortyApiService)
 	{
-		_IMemoryCache = memoryCache;
-		_SimpleWebClient = simpleWebClient;
-	}
-
-	private async Task<CharacterResponse> FilterCachedAsync(string name, int page)
-	{
-		var key =
-			$"Filter:{name?.Trim().ToLower()}:{page}";
-
-		if (_IMemoryCache.TryGetValue(key, out CharacterResponse cachedResponse))
-			return cachedResponse;
-
-		var response =
-			await _SimpleWebClient.GetUrlAsStringAsync(
-				$"https://rickandmortyapi.com/api/character/",
-				new Dictionary<string, string>
-				{
-					{ "name", name },
-					{ "page", page.ToString() }
-				});
-
-		if (response.Status != HttpStatusCode.OK)
-			return default;
-
-		var result =
-			response.Content.ToObjectByJson<CharacterResponse>();
-
-		_IMemoryCache.Set(key, result);
-		return result;
+		_RickAndMortyApiService = rickAndMortyApiService;
 	}
 
 	[HttpGet("Api/Character")]
@@ -55,7 +22,7 @@ public partial class RickAndMortyApiController : ControllerBase
 				page = 1;
 
 			var response =
-				await FilterCachedAsync(name, page);
+				await _RickAndMortyApiService.FilterCachedAsync(name, page);
 
 			if (response == null)
 				return NotFound();
