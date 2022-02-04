@@ -8,3 +8,9 @@ This project is build with Vue3, vitejs, tailwind + .netcore 3.1
 - run /App.Server/_Client/export-cert.cmd to export local IIS certificate for use with the vitejs dev server
 - run dev.cmd to startup vue client with vitejs from the Visual Studio Developer-PowerShell
 - start project in Visual Studio
+
+## Hosted 
+
+See a live demo running here
+
+[https://rickandmorty.dev.cmszwo.de/](https://rickandmorty.dev.cmszwo.de/)
