@@ -26,6 +26,7 @@ public class Startup
 		}
 
 		app.UseRouting();
+		app.UseDefaultFiles();
 		app.UseStaticFiles();
 
 		app.UseEndpoints(endpoints =>
