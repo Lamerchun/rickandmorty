@@ -15,11 +15,11 @@ public class Character
 	public string Type { get; set; }
 	public string Gender { get; set; }
 
-	[JsonProperty("Episode")]
-	public List<string> Episodes { get; set; } = new();
+	[JsonProperty("episode")]
+	public IEnumerable<string> Episodes { get; set; }
 
 	[JsonIgnore]
-	public List<CharacterEpisode> Episode { get; set; } = new();
+	public IEnumerable<CharacterEpisode> Episode { get; set; }
 
 	public CharacterSubData Location { get; set; } = new();
 	public CharacterSubData Origin { get; set; } = new();

@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder
 	.Services
 	.AddMvc()
+	.AddNewtonsoftJson()
 	.AddControllersAsServices()
 	.ConfigureApiBehaviorOptions(options =>
 	{
