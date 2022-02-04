@@ -1,21 +1,41 @@
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace us;
+using us;
 
-public class Program
-{
-	public static void Main(string[] args)
+var builder = WebApplication.CreateBuilder(args);
+
+builder
+	.Services
+	.AddMvc()
+	.AddControllersAsServices()
+	.ConfigureApiBehaviorOptions(options =>
 	{
-		CreateHostBuilder(args).Build().Run();
-	}
+		options.InvalidModelStateResponseFactory =
+			context => new BadRequestObjectResult(context.ModelState);
+	});
 
-	public static IHostBuilder CreateHostBuilder(string[] args)
-		=>
-			Host
-				.CreateDefaultBuilder(args)
-				.ConfigureWebHostDefaults(webBuilder =>
-				{
-					webBuilder.UseStartup<Startup>();
-				});
+builder.Services.AddResponseCompression();
+builder.Services.AddSingleton<ISimpleWebClient>(new SimpleWebClient());
+
+var app = builder.Build();
+
+app.UseHsts();
+app.UseResponseCompression();
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+app.UseRouting();
+app.UseEndpoints(x => x.MapControllers());
+
+if (app.Environment.IsDevelopment())
+{
+	app.UseViteRunningCheck();
+	app.UseDeveloperExceptionPage();
+	app.UseViteProxy();
 }
+
+app.Run();
+

@@ -11,11 +11,12 @@ namespace us;
 public partial class RickAndMortyApiController : ControllerBase
 {
 	private readonly IMemoryCache _IMemoryCache;
-	private readonly SimpleWebClient _SimpleWebClient = new();
+	private readonly ISimpleWebClient _SimpleWebClient;
 
-	public RickAndMortyApiController(IMemoryCache memoryCache)
+	public RickAndMortyApiController(IMemoryCache memoryCache, ISimpleWebClient simpleWebClient)
 	{
 		_IMemoryCache = memoryCache;
+		_SimpleWebClient = simpleWebClient;
 	}
 
 	private async Task<CharacterResponse> FilterCachedAsync(string name, int page)

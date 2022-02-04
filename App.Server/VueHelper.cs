@@ -23,7 +23,7 @@ public static class VueHelper
 		});
 	}
 
-	public static void UseViteProxy(this IApplicationBuilder app)
+	public static void UseViteProxy(this WebApplication app)
 	{
 		var devServerEndpoint = new Uri($"https://localhost:{_DevServerPort}");
 		app.UseSpa(x => x.UseProxyToSpaDevelopmentServer(devServerEndpoint));

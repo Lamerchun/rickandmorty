@@ -7,7 +7,12 @@ using System.Collections.Generic;
 
 namespace us;
 
-public class SimpleWebClient : IDisposable
+public interface ISimpleWebClient
+{
+	Task<SimpleHttpResponse<string>> GetUrlAsStringAsync(string url, Dictionary<string, string> parameters);
+}
+
+public class SimpleWebClient : ISimpleWebClient, IDisposable
 {
 	private readonly HttpClient _HttpClient = new();
 
