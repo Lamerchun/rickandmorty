@@ -8,7 +8,7 @@
 		</div>
 		<div class="flex flex-row gap-2 justify-center">
 			<div v-if="hasPrev"
-				 class="bg-blue-500 text-white py-2 px-4 rounded select-none cursor-pointer"
+				 class="bg-blue-500 pd:hover:bg-blue-700 text-white py-2 px-4 rounded select-none cursor-pointer"
 				 @click="onPrev">
 				Prev
 			</div>
@@ -18,7 +18,7 @@
 			</div>
 
 			<div v-if="hasNext"
-				 class="bg-blue-500 text-white py-2 px-4 rounded select-none cursor-pointer"
+				 class="bg-blue-500 pd:hover:bg-blue-700 text-white py-2 px-4 rounded select-none cursor-pointer"
 				 @click="onNext">
 				Next
 			</div>

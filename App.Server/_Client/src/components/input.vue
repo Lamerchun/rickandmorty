@@ -16,7 +16,7 @@
 
 			<div v-if="modelValue"
 				 @click="onClear"
-				 class="flex p-4 cursor-pointer items-center justify-center text-xl rounded-full bg-gray-300 w-[30px] h-[30px]">
+				 class="flex p-4 cursor-pointer items-center justify-center text-xl rounded-full bg-gray-300 pd:hover:bg-gray-400 w-[30px] h-[30px]">
 				<div class="relative bottom-[1px]">✕</div>
 			</div>
 		</div>

@@ -2,10 +2,16 @@
 	<ul class="flex flex-row gap-8 select-none">
 		<li v-for="(label, index) in labels"
 			class="flex flex-row gap-2 cursor-pointer"
-			@click="$emit('update:modelValue', index)">
+			@click="$emit('update:modelValue', index)"
+			@mouseenter="hover=true"
+			@mouseleave="hover=false">
 			<div class="relative rounded-full border border-black w-[30px] h-[30px]">
 				<div v-if="modelValue == index"
 					 class="m-1 absolute inset-0 rounded-full bg-black">
+				</div>
+				<div v-if="modelValue != index"
+					 class="bg-white m-1 absolute inset-0 rounded-full"
+					 :class="{ 'pd:bg-gray-200': hover }">
 				</div>
 			</div>
 			<div>
@@ -16,7 +22,17 @@
 </template>
 
 <script>
+	import { ref } from 'vue'
+
 	export default {
-		props: ['modelValue', 'labels']
+		props: ['modelValue', 'labels'],
+
+		setup() {
+			const hover = ref();
+
+			return {
+				hover
+			}
+		}
 	}
 </script>
