@@ -111,7 +111,7 @@
 			}
 
 			async function queryREST(name) {
-				let apiUrl = 'https://rickandmortyapi.com/api/character/';
+				let apiUrl = 'https://rickandmortyapi.com/api/character';
 
 				if (!useLiveApi.value)
 					apiUrl = '/Api/Character';
