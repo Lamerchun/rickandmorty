@@ -32,7 +32,10 @@ public class Startup
 			endpoints.MapControllers();
 		});
 
-		app.UseViteProxy();
+		if (env.IsDevelopment())
+		{
+			app.UseViteProxy();
+		}
 	}
 
 	public virtual void ConfigureServices(IServiceCollection services)
