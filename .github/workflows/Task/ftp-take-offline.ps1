@@ -66,10 +66,13 @@ if([string]::IsNullOrEmpty($artifactDirectory))
 $fileName = "app_offline.htm"
 $content = $false
 
-$customFilePath = "${artifactDirectory}\\_${fileName}"
-$defaultFilePath = "${libDirectory}\\${fileName}"
+$customFilePath = "${artifactDirectory}/_${fileName}"
+$defaultFilePath = "${libDirectory}/${fileName}"
 
-if([System.IO.File]::Exists($customFilePath))
+Write-Host "Custom: ${customFilePath}"
+Write-Host "Default: ${defaultFilePath}"
+
+if([System.IO.File]::Exists($customFilePath))aa
 {
     Write-Host "Using custom ${fileName}"
     $content = [System.IO.File]::ReadAllBytes($customFilePath)
