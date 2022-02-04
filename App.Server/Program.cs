@@ -17,7 +17,7 @@ builder
 			context => new BadRequestObjectResult(context.ModelState);
 	});
 
-builder.Services.AddResponseCompression();
+builder.Services.AddCompression();
 builder.Services.AddSingleton<ISimpleWebClient>(new SimpleWebClient());
 
 var app = builder.Build();
@@ -27,8 +27,7 @@ app.UseResponseCompression();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.UseRouting();
-app.UseEndpoints(x => x.MapControllers());
+app.UseRouting().UseEndpoints(x => x.MapControllers());
 
 if (app.Environment.IsDevelopment())
 {
