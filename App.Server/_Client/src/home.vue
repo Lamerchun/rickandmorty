@@ -3,8 +3,10 @@
 		<h1 class="text-5xl font-bold select-none">Rick &amp; Morty</h1>
 
 		<div class="flex flex-col gap-4 items-center">
-			<us-query-switch v-model="useGraphQL" />
-			<us-host-switch v-model="useLiveApi" />
+			<us-switch v-model="apiIndex"
+					   :labels="['GraphQL', 'REST']" />
+			<us-switch v-model="hostIndex"
+					   :labels="['live', 'proxy']" />
 		</div>
 
 		<us-input v-model="input"
@@ -32,27 +34,29 @@
 </template>
 
 <script>
-	import { ref, watch, onMounted, onUnmounted } from 'vue'
+	import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 	import axios from 'axios'
 
-	import usQuerySwitch from './components/query-switch.vue'
-	import usHostSwitch from './components/host-switch.vue'
+	import usSwitch from './components/switch.vue'
 	import usInput from './components/input.vue'
 	import usPager from './components/pager.vue'
 	import usResults from './components/results.vue'
 
 	export default {
 		components: {
-			usQuerySwitch,
-			usHostSwitch,
+			usSwitch,
 			usInput,
 			usPager,
 			usResults
 		},
 
 		setup() {
-			const useGraphQL = ref(true);
-			const useLiveApi = ref(true);
+			const apiIndex = ref(0);
+			const hostIndex = ref(0);
+
+			const useGraphQL = computed(() => apiIndex.value == 0);
+			const useLiveApi = computed(() => hostIndex.value == 0);
+
 			const input = ref();
 
 			const suggestions = ref(true);
@@ -190,8 +194,8 @@
 			});
 
 			return {
-				useGraphQL,
-				useLiveApi,
+				apiIndex,
+				hostIndex,
 				input,
 
 				suggestions,
