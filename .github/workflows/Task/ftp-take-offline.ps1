@@ -72,7 +72,7 @@ $defaultFilePath = "${libDirectory}/${fileName}"
 Write-Host "Custom: ${customFilePath}"
 Write-Host "Default: ${defaultFilePath}"
 
-if([System.IO.File]::Exists($customFilePath))aa
+if([System.IO.File]::Exists($customFilePath))
 {
     Write-Host "Using custom ${fileName}"
     $content = [System.IO.File]::ReadAllBytes($customFilePath)
