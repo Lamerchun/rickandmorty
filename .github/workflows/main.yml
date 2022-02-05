@@ -46,11 +46,9 @@ jobs:
             ./**/*.log
 
       - name: Build
-        if: github.ref_name == 'main'
         run: dotnet publish --configuration Release
 
       - name: Deploy FTP
-        if: github.ref_name == 'main'
         shell: pwsh
         run: |
           ./.github/workflows/Task/ftp-take-offline.ps1
