@@ -11,7 +11,6 @@ public class CharacterGraphQLQuery
 		int page,
 		Filter filter)
 	{
-
 		var response =
 			await rickAndMortyApiService.FilterCachedAsync(filter.Name, page);
 

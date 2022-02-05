@@ -1,5 +1,5 @@
 <template>
-	<div class="max-w-screen-md px-6 mx-auto my-12 flex flex-col gap-12">
+	<div class="max-w-screen-md px-4 mx-auto my-12 flex flex-col gap-12">
 		<main>
 			<router-view />
 		</main>

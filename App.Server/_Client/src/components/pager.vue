@@ -1,10 +1,12 @@
 ﻿<template>
-	<div class="flex flex-col text-center gap-1 items-center md:flex-row md:gap-6">
-		<div>
-			Results: {{total}}
-		</div>
-		<div>
-			Page {{page}} of {{pages}}
+	<div class="flex flex-row text-center gap-12 items-center">
+		<div class="flex flex-col md:flex-row md:gap-6">
+			<div>
+				Results: {{total}}
+			</div>
+			<div>
+				Page {{page}} of {{pages}}
+			</div>
 		</div>
 		<div class="flex flex-row gap-2 justify-center">
 			<div v-if="hasPrev"
