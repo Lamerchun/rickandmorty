@@ -13,7 +13,12 @@ public static class Startup
 	{
 		var builder = WebApplication.CreateBuilder(args);
 
-		builder.Logging.AddConsole();
+		builder
+			.Services
+			.AddLogging(loggingBuilder =>
+			{
+				loggingBuilder.AddFile("app.log", append: true);
+			});
 
 		builder
 			.Services
