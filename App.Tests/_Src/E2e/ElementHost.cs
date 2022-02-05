@@ -59,12 +59,12 @@ public abstract class ElementHost
 
 	protected IWebElement WaitDisplayed(ISearchContext searchContext, By query)
 	{
-		var maxLoops = 2;
+		var maxLoops = 10;
 
 		if (_FirstWait)
 		{
 			_FirstWait = false;
-			maxLoops = 10;
+			maxLoops = 20;
 		}
 
 		if (Debugger.IsAttached)

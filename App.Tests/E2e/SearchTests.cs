@@ -48,7 +48,6 @@ public class SearchTests : TestBase
 				{
 					homePage.ClickREST();
 					homePage.ClickProxy();
-					E2eHelper.Wait(4_000);
 				}
 			};
 	}
