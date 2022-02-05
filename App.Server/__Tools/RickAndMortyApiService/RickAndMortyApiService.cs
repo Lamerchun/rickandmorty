@@ -55,7 +55,7 @@ public class RickAndMortyApiService : IRickAndMortyApiService
 		var result =
 			response.Content.ToObjectByJson<CharacterResponse>();
 
-		_Logger.LogWarning($"REST query results: name: {name}, page: {page}, count: {result.Results.Count}");
+		_Logger.LogInformation($"REST query results: name: {name}, page: {page}, count: {result.Results.Count}");
 
 		_IMemoryCache.Set(key, result);
 		return result;

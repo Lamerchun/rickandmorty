@@ -1,5 +1,6 @@
-# Application folders
+# Application
 App_Data/
+app.log
 
 # Build
 obj/
