@@ -1,7 +1,6 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Caching.Memory;
 using NUnit.Framework;
 using Moq;
@@ -19,9 +18,6 @@ public class RickAndMortyApiServiceTests
 	{
 		// Arrange
 
-		var logger =
-			new Mock<ILogger<RickAndMortyApiService>>();
-
 		var memoryCache =
 			new MemoryCache(new MemoryCacheOptions());
 
@@ -34,7 +30,6 @@ public class RickAndMortyApiServiceTests
 
 		var service =
 			new RickAndMortyApiService(
-				logger.Object,
 				memoryCache,
 				simpleWebClient.Object
 			);
@@ -52,9 +47,6 @@ public class RickAndMortyApiServiceTests
 	{
 		// Arrange
 
-		var logger =
-			new Mock<ILogger<RickAndMortyApiService>>();
-
 		var memoryCache =
 			new MemoryCache(new MemoryCacheOptions());
 
@@ -67,7 +59,6 @@ public class RickAndMortyApiServiceTests
 
 		var service =
 			new RickAndMortyApiService(
-				logger.Object,
 				memoryCache,
 				simpleWebClient.Object
 			);
@@ -88,9 +79,6 @@ public class RickAndMortyApiServiceTests
 	{
 		// Arrange
 
-		var logger =
-			new Mock<ILogger<RickAndMortyApiService>>();
-
 		var memoryCache =
 			new MemoryCache(new MemoryCacheOptions());
 
@@ -103,7 +91,6 @@ public class RickAndMortyApiServiceTests
 
 		var service =
 			new RickAndMortyApiService(
-				logger.Object,
 				memoryCache,
 				simpleWebClient.Object
 			);

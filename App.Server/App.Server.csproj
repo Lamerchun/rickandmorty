@@ -28,7 +28,6 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Moq" Version="4.16.1" />
-		<PackageReference Include="NReco.Logging.File" Version="1.1.4" />
 		<PackageReference Include="System.Runtime.Caching" Version="6.0.0" />
 		<TypeScriptCompile Remove="_Client\node_modules\**" />
 	</ItemGroup>

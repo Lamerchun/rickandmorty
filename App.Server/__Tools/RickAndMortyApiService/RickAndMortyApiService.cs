@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace us;
@@ -13,24 +12,19 @@ public interface IRickAndMortyApiService
 
 public class RickAndMortyApiService : IRickAndMortyApiService
 {
-	private readonly ILogger<RickAndMortyApiService> _Logger;
 	private readonly IMemoryCache _IMemoryCache;
 	private readonly ISimpleWebClient _SimpleWebClient;
 
 	public RickAndMortyApiService(
-		ILogger<RickAndMortyApiService> logger,
 		IMemoryCache memoryCache,
 		ISimpleWebClient simpleWebClient)
 	{
-		_Logger = logger;
 		_IMemoryCache = memoryCache;
 		_SimpleWebClient = simpleWebClient;
 	}
 
 	public async Task<CharacterResponse> FilterCachedAsync(string name, int page)
 	{
-		_Logger.LogInformation($"REST query: name: {name}, page: {page}");
-
 		var key =
 			$"Filter:{name?.Trim().ToLower()}:{page}";
 
@@ -47,15 +41,10 @@ public class RickAndMortyApiService : IRickAndMortyApiService
 				});
 
 		if (response.Status != HttpStatusCode.OK)
-		{
-			_Logger.LogWarning($"REST query fail: name: {name}, page: {page}");
 			return default;
-		}
 
 		var result =
 			response.Content.ToObjectByJson<CharacterResponse>();
-
-		_Logger.LogInformation($"REST query results: name: {name}, page: {page}, count: {result.Results.Count}");
 
 		_IMemoryCache.Set(key, result);
 		return result;

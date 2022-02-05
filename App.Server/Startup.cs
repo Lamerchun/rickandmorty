@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,11 +10,6 @@ public static class Startup
 	public static IHost CreateApp(string[] args)
 	{
 		var builder = WebApplication.CreateBuilder(args);
-
-		builder.Services.AddLogging(loggingBuilder =>
-		{
-			loggingBuilder.AddFile("app.log", append: true);
-		});
 
 		var containingAssemly =
 			typeof(Startup).Assembly;
@@ -31,7 +25,6 @@ public static class Startup
 
 		builder.Services.AddSingleton<IRickAndMortyApiService>(
 			x => new RickAndMortyApiService(
-				x.GetRequiredService<ILogger<RickAndMortyApiService>>(),
 				x.GetRequiredService<IMemoryCache>(),
 				x.GetRequiredService<ISimpleWebClient>())
 			);
