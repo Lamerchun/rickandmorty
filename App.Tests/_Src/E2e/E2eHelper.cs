@@ -5,8 +5,11 @@ namespace Tests.E2e;
 public static class E2eHelper
 {
 	public static void WaitUI()
-		=> Thread.Sleep(250);
+		=> Wait(250);
 
 	public static void WaitApi()
-		=> Thread.Sleep(500);
+		=> Wait(500);
+
+	public static void Wait(int ms)
+		=> Thread.Sleep(ms);
 }
