@@ -74,7 +74,7 @@ public abstract class ElementHost
 		{
 			try
 			{
-				var result = 
+				var result =
 					searchContext.FindElement(query);
 
 				if (result.Displayed)
@@ -94,7 +94,7 @@ public abstract class ElementHost
 		var cam = Driver as ITakesScreenshot;
 		var screenshot = cam.GetScreenshot();
 
-		var file = Path.Combine(TestContext.CurrentContext.WorkDirectory, "screenshot.png");
+		var file = Path.Combine(TestContext.CurrentContext.WorkDirectory, $"e2e-{TestContext.CurrentContext.Test.Name}.png");
 		screenshot.SaveAsFile(file, ScreenshotImageFormat.Png);
 		TestContext.AddTestAttachment(file, $"Error: Waiting for Element failed.");
 	}

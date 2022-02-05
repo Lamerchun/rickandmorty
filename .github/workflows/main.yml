@@ -36,6 +36,13 @@ jobs:
         - name: Run Tests
           run: dotnet test --configuration Release
 
+        - name: Upload E2E failure screenshots
+          if: failure()
+          uses: actions/upload-artifact@v2
+          with:
+            name: screenshots
+            path: ./**/e2e*.png
+
         - name: Build
           run: dotnet publish --configuration Release
 
