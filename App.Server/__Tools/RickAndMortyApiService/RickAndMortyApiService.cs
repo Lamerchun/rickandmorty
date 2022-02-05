@@ -29,6 +29,8 @@ public class RickAndMortyApiService : IRickAndMortyApiService
 
 	public async Task<CharacterResponse> FilterCachedAsync(string name, int page)
 	{
+		_Logger.LogInformation($"REST query: name: {name}, page: {page}");
+
 		var key =
 			$"Filter:{name?.Trim().ToLower()}:{page}";
 

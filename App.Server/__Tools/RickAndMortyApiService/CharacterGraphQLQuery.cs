@@ -13,6 +13,8 @@ public class CharacterGraphQLQuery
 		int page,
 		Filter filter)
 	{
+		logger.LogInformation($"GraphQL query: name: {filter.Name}, page: {page}");
+
 		var response =
 			await rickAndMortyApiService.FilterCachedAsync(filter.Name, page);
 

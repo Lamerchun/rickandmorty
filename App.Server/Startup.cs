@@ -13,6 +13,8 @@ public static class Startup
 	{
 		var builder = WebApplication.CreateBuilder(args);
 
+		builder.Logging.AddConsole();
+
 		builder
 			.Services
 			.AddMvc()
