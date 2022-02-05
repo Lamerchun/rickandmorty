@@ -1,4 +1,4 @@
-name: dotnet package
+name: build and deploy
 
 on:
   push:
@@ -32,6 +32,12 @@ jobs:
 
         - name: Install dependencies
           run: dotnet restore
+
+        - name: Start Vite
+          shell: pwsh
+          run: |
+            cd App.Server
+            ./dev.cmd
 
         - name: Run Tests
           run: dotnet test
