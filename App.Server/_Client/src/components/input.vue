@@ -84,7 +84,7 @@
 						if (suggestionsIndex.value != null)
 							emit('update:modelValue', props.suggestions[suggestionsIndex.value]);
 
-					emit('enter');
+					emit('enter', { input: inputDom.value });
 				},
 
 				async onUp() {

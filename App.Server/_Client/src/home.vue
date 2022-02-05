@@ -230,10 +230,11 @@
 					showSuggestions.value = false;
 				},
 
-				async onEnter() {
+				async onEnter({ input }) {
 					showResults.value = true;
 					suggestions.value = null;
 					showSuggestions.value = false;
+					input.blur();
 					await updateUI(input.value);
 				},
 
