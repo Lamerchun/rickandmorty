@@ -66,7 +66,8 @@ public abstract class E2eFixtureBase
 		{
 				"--urls", _Url,
 				"--contentroot", sitePath,
-				"--environment", "development"
+				"--environment", "development",
+				"--Logging:LogLevel:Default", "Information"
 			};
 
 		return Startup.CreateApp(args);

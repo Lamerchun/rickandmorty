@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace us;
 
@@ -28,6 +29,7 @@ public static class Startup
 
 		builder.Services.AddSingleton<IRickAndMortyApiService>(
 			x => new RickAndMortyApiService(
+				x.GetRequiredService<ILogger<RickAndMortyApiService>>(),
 				x.GetRequiredService<IMemoryCache>(),
 				x.GetRequiredService<ISimpleWebClient>())
 			);

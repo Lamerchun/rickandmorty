@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace us;
@@ -12,11 +13,16 @@ public interface IRickAndMortyApiService
 
 public class RickAndMortyApiService : IRickAndMortyApiService
 {
+	private readonly ILogger<RickAndMortyApiService> _Logger;
 	private readonly IMemoryCache _IMemoryCache;
 	private readonly ISimpleWebClient _SimpleWebClient;
 
-	public RickAndMortyApiService(IMemoryCache memoryCache, ISimpleWebClient simpleWebClient)
+	public RickAndMortyApiService(
+		ILogger<RickAndMortyApiService> logger,
+		IMemoryCache memoryCache,
+		ISimpleWebClient simpleWebClient)
 	{
+		_Logger = logger;
 		_IMemoryCache = memoryCache;
 		_SimpleWebClient = simpleWebClient;
 	}
@@ -39,7 +45,10 @@ public class RickAndMortyApiService : IRickAndMortyApiService
 				});
 
 		if (response.Status != HttpStatusCode.OK)
+		{
+			_Logger.LogWarning($"Fail fetch api: name: {name}, page: {page}");
 			return default;
+		}
 
 		var result =
 			response.Content.ToObjectByJson<CharacterResponse>();
