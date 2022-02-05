@@ -14,6 +14,7 @@ public class Character
 	public string Species { get; set; }
 	public string Type { get; set; }
 	public string Gender { get; set; }
+	public string Image { get; set; }
 
 	[JsonProperty("episode")]
 	public IEnumerable<string> Episodes { get; set; }

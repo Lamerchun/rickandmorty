@@ -1,5 +1,7 @@
-# Application folders
+# Application
 App_Data/
+wwwroot/**
+app.log
 
 # Build
 obj/

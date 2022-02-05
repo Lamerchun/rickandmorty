@@ -1,5 +1,4 @@
-[![build and deploy](https://github.com/Lamerchun/rickandmorty/actions/workflows/main.yml/badge.svg)](https://github.com/Lamerchun/rickandmorty/actions/workflows/main.yml)
-
+[![main build and deploy](https://github.com/Lamerchun/rickandmorty/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/Lamerchun/rickandmorty/actions/workflows/main.yml) [![branch build](https://github.com/Lamerchun/rickandmorty/actions/workflows/branch.yml/badge.svg?branch=develop)](https://github.com/Lamerchun/rickandmorty/actions/workflows/branch.yml)
 # The Rick and Morty
 
 This excercise implements a simple client / server for [The Rick and Morty API](https://rickandmortyapi.com). Both REST and [GraphQL](https://graphql.org/) are implemented for a simple character search by name.

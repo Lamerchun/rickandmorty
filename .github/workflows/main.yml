@@ -3,7 +3,7 @@ name: main build and deploy
 on: 
   push:
     branches:
-        - main
+      - main
 
 env:
   SERVER: ${{ secrets.FTP_HOST }}
@@ -36,12 +36,14 @@ jobs:
       - name: Run Tests
         run: dotnet test --configuration Release
 
-      - name: Upload E2E failure screenshots
+      - name: Upload artifacts
         if: failure()
         uses: actions/upload-artifact@v2
         with:
-          name: screenshots
-          path: ./**/e2e*.png
+          name: test
+          path: |
+            ./**/e2e*.png
+            ./**/*.log
 
       - name: Build
         if: github.ref_name == 'main'

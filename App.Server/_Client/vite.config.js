@@ -6,13 +6,6 @@ export default defineConfig({
 
 	server: {
 		host: true,
-		proxy: {
-			'/Api': {
-				target: 'https://localhost:44386',
-				changeOrigin: false,
-				secure: false
-			}
-		},
 		https: {
 			pfx: 'devcert.pfx',
 			passphrase: '0123456789'
