@@ -73,7 +73,7 @@ public class SearchTests : TestBase
 
 		// Act, Assert
 		homePage.ClickREST();
-		homePage.ClickLive();
+		homePage.ClickProxy();
 		homePage.ResetInput();
 
 		homePage.TypeSearch("ri");
