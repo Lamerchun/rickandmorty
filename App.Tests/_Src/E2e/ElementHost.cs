@@ -59,12 +59,12 @@ public abstract class ElementHost
 
 	protected IWebElement WaitDisplayed(ISearchContext searchContext, By query)
 	{
-		var maxLoops = 10;
+		var maxLoops = 5;
 
 		if (_FirstWait)
 		{
 			_FirstWait = false;
-			maxLoops = 20;
+			maxLoops = 10;
 		}
 
 		if (Debugger.IsAttached)
@@ -74,7 +74,9 @@ public abstract class ElementHost
 		{
 			try
 			{
-				var result = searchContext.FindElement(query);
+				var result = 
+					searchContext.FindElement(query);
+
 				if (result.Displayed)
 					return result;
 			}

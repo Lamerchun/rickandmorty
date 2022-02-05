@@ -43,11 +43,6 @@ public class SearchTests : TestBase
 				{
 					homePage.ClickREST();
 					homePage.ClickLive();
-				},
-				homePage =>
-				{
-					homePage.ClickREST();
-					homePage.ClickProxy();
 				}
 			};
 	}
