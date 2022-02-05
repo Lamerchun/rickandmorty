@@ -8,5 +8,5 @@ public static class E2eHelper
 		=> Thread.Sleep(250);
 
 	public static void WaitApi()
-		=> Thread.Sleep(500);
+		=> Thread.Sleep(1_500);
 }
