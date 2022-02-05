@@ -1,8 +1,16 @@
-name: build and deploy
+name: main
 
-on: push
+on: 
+  push:
+    branches:
+        - main
 
 env:
+  SERVER: ${{ secrets.FTP_HOST }}
+  USER: ${{ secrets.FTP_USER }}
+  PASSWORD: ${{ secrets.FTP_PASSWORD }}
+  REMOTE_DIRECTORY: ${{ github.event.repository.name }}-${{ github.ref_name }}
+  LIB_DIRECTORY : ./.github/workflows
   ARTIFACT_DIRECTORY: ./App.Server/bin/Release/net6.0/publish/
 
 jobs:
@@ -15,64 +23,34 @@ jobs:
         dotnet: [ '6.x' ]
 
     steps:
-        - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-        - name: Setup dotnet
-          uses: actions/setup-dotnet@v1
-          with:
-            dotnet-version: '6.x'
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.x'
 
-        - name: Install dependencies
-          run: dotnet restore
+      - name: Install dependencies
+        run: dotnet restore
 
-        - name: Run Tests
-          run: dotnet test --configuration Release
+      - name: Run Tests
+        run: dotnet test --configuration Release
 
-        - name: Upload E2E failure screenshots
-          if: failure()
-          uses: actions/upload-artifact@v2
-          with:
-            name: screenshots
-            path: ./**/e2e*.png
+      - name: Upload E2E failure screenshots
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: screenshots
+          path: ./**/e2e*.png
 
-        - name: Build
-          if: github.ref_name == 'main'
-          run: dotnet publish --configuration Release
+      - name: Build
+        if: github.ref_name == 'main'
+        run: dotnet publish --configuration Release
 
-        - name: Upload Artifact
-          if: github.ref_name == 'main'
-          uses: actions/upload-artifact@v2
-          with:
-            name: publish
-            path: ${{ env.ARTIFACT_DIRECTORY }}
-
-  deploy:
-
-    if: github.ref_name == 'main'
-    runs-on: ubuntu-latest
-    environment: Host
-    strategy:
-      matrix:
-        dotnet: [ '6.x' ]
-
-    env:
-      SERVER: ${{ secrets.FTP_HOST }}
-      USER: ${{ secrets.FTP_USER }}
-      PASSWORD: ${{ secrets.FTP_PASSWORD }}
-      REMOTE_DIRECTORY: ${{ github.event.repository.name }}-${{ github.ref_name }}
-      LIB_DIRECTORY : ./.github/workflows
-
-    steps:
-        - name: Download Artifact
-          uses: actions/download-artifact@v2
-          with:
-            name: publish
-            path: ${{ env.ARTIFACT_DIRECTORY }}
-
-        - name: Deploy FTP
-          if: github.ref_name == 'main'
-          shell: pwsh
-          run: |
-            ./.github/workflows/Task/ftp-take-offline.ps1
-            ./.github/workflows/Task/ftp-sync.ps1
-            ./.github/workflows/Task/ftp-take-online.ps1
+      - name: Deploy FTP
+        if: github.ref_name == 'main'
+        shell: pwsh
+        run: |
+          ./.github/workflows/Task/ftp-take-offline.ps1
+          ./.github/workflows/Task/ftp-sync.ps1
+          ./.github/workflows/Task/ftp-take-online.ps1
