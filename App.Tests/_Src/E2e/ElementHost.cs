@@ -64,7 +64,7 @@ public abstract class ElementHost
 		if (_FirstWait)
 		{
 			_FirstWait = false;
-			maxLoops = 2;
+			maxLoops = 10;
 		}
 
 		if (Debugger.IsAttached)
