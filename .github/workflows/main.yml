@@ -3,7 +3,7 @@ name: main build and deploy
 on: 
   push:
     branches:
-        - main
+      - main
 
 env:
   SERVER: ${{ secrets.FTP_HOST }}
