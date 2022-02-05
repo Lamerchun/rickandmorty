@@ -2,7 +2,7 @@
 	<div class="w-full border border-black rounded-md overflow-hidden">
 		<table>
 			<tr>
-				<th>
+				<th class="w-[60px]">
 					ID
 				</th>
 				<th>
@@ -17,7 +17,12 @@
 			</tr>
 			<tr v-for="entry in results">
 				<td>
-					{{entry.id}}
+					<div class="w-[60px] h-[60px] bg-center bg-cover rounded relative"
+						 :style="{ backgroundImage: `url(${entry.image})` }">
+						<div class="text-xs px-1 bg-gray-50 opacity-60 gap-1 rounded absolute right-[2px] bottom-[2px]">
+							{{entry.id}}
+						</div>
+					</div>
 				</td>
 				<td>
 					<ul class="flex flex-col gap-1">

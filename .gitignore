@@ -1,6 +1,6 @@
 # Application
 App_Data/
-wwwroot/
+wwwroot/**
 app.log
 
 # Build

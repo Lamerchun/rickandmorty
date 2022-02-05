@@ -151,6 +151,7 @@
 										results {
 										  id
 										  name
+										  image
 										  species
 										  status
 										  episode {
