@@ -48,12 +48,14 @@ public class RickAndMortyApiService : IRickAndMortyApiService
 
 		if (response.Status != HttpStatusCode.OK)
 		{
-			_Logger.LogWarning($"Fail fetch api: name: {name}, page: {page}");
+			_Logger.LogWarning($"REST query fail: name: {name}, page: {page}");
 			return default;
 		}
 
 		var result =
 			response.Content.ToObjectByJson<CharacterResponse>();
+
+		_Logger.LogWarning($"REST query results: name: {name}, page: {page}, count: {result.Results.Count}");
 
 		_IMemoryCache.Set(key, result);
 		return result;
