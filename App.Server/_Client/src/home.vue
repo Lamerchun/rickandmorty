@@ -114,7 +114,7 @@
 				let apiUrl = 'https://rickandmortyapi.com/api/character';
 
 				if (!useLiveApi.value)
-					apiUrl = '/Api/Character';
+					apiUrl = '/api/character';
 
 				try {
 					const response = await axios.get(apiUrl, {
@@ -136,7 +136,7 @@
 				let apiUrl = 'https://rickandmortyapi.com/graphql';
 
 				if (!useLiveApi.value)
-					apiUrl = '/graphQL';
+					apiUrl = '/graphql';
 
 				try {
 					const response = await axios.post(apiUrl, {

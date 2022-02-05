@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Logging;
@@ -13,23 +12,19 @@ public static class Startup
 	{
 		var builder = WebApplication.CreateBuilder(args);
 
-		builder
-			.Services
-			.AddLogging(loggingBuilder =>
-			{
-				loggingBuilder.AddFile("app.log", append: true);
-			});
+		builder.Services.AddLogging(loggingBuilder =>
+		{
+			loggingBuilder.AddFile("app.log", append: true);
+		});
+
+		var containingAssemly =
+			typeof(Startup).Assembly;
 
 		builder
 			.Services
-			.AddMvc()
-			.AddNewtonsoftJson()
-			.AddControllersAsServices()
-			.ConfigureApiBehaviorOptions(options =>
-			{
-				options.InvalidModelStateResponseFactory =
-					context => new BadRequestObjectResult(context.ModelState);
-			});
+				.AddMvc()
+				.AddApplicationPart(containingAssemly)
+				.AddNewtonsoftJson();
 
 		builder.Services.AddCompression();
 		builder.Services.AddSingleton<ISimpleWebClient>(new SimpleWebClient());
@@ -49,23 +44,25 @@ public static class Startup
 
 		app.UseHsts();
 		app.UseResponseCompression();
-		app.UseDefaultFiles();
-		app.UseStaticFiles();
 
-		app
-			.UseRouting()
-			.UseEndpoints(
-				x =>
-				{
-					x.MapControllers();
-					x.MapGraphQL();
-				});
+		app.UseRouting();
+		app.UseEndpoints(x =>
+		{
+			x.MapControllers();
+			x.Map("/test", () => "HELLO");
+			x.MapGraphQL();
+		});
 
 		if (app.Environment.IsDevelopment())
 		{
 			app.UseViteRunningCheck();
 			app.UseDeveloperExceptionPage();
 			app.UseViteProxy();
+		}
+		else
+		{
+			app.UseDefaultFiles();
+			app.UseStaticFiles();
 		}
 
 		return app;

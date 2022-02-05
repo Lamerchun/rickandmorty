@@ -66,7 +66,7 @@ public abstract class E2eFixtureBase
 		{
 				"--urls", _Url,
 				"--contentroot", sitePath,
-				"--environment", "development",
+				"--environment", "production",
 				"--Logging:LogLevel:Default", "Information"
 			};
 
