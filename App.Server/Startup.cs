@@ -49,7 +49,6 @@ public static class Startup
 		app.UseEndpoints(x =>
 		{
 			x.MapControllers();
-			x.Map("/test", () => "HELLO");
 			x.MapGraphQL();
 		});
 
