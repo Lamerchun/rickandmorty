@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace us;
+namespace R4;
 
 public static class ServiceCollectionExtensions
 {

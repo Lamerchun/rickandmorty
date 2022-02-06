@@ -2,6 +2,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using R4;
 
 namespace us;
 
@@ -10,6 +11,7 @@ public static class Startup
 	public static IHost CreateApp(string[] args)
 	{
 		var builder = WebApplication.CreateBuilder(args);
+		builder.AddAutofac();
 
 		var containingAssemly =
 			typeof(Startup).Assembly;
@@ -18,16 +20,10 @@ public static class Startup
 			.Services
 				.AddMvc()
 				.AddApplicationPart(containingAssemly)
+				.AddControllersAsServices()
 				.AddNewtonsoftJson();
 
 		builder.Services.AddCompression();
-		builder.Services.AddSingleton<ISimpleWebClient>(new SimpleWebClient());
-
-		builder.Services.AddSingleton<IRickAndMortyApiService>(
-			x => new RickAndMortyApiService(
-				x.GetRequiredService<IMemoryCache>(),
-				x.GetRequiredService<ISimpleWebClient>())
-			);
 
 		builder.Services
 			.AddGraphQLServer()
@@ -51,11 +47,9 @@ public static class Startup
 			app.UseDeveloperExceptionPage();
 			app.UseViteProxy();
 		}
-		else
-		{
-			app.UseDefaultFiles();
-			app.UseStaticFiles();
-		}
+
+		app.UseDefaultFiles();
+		app.UseStaticFiles();
 
 		return app;
 	}

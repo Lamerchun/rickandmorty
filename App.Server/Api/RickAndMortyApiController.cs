@@ -6,12 +6,7 @@ namespace us;
 [ApiController]
 public partial class RickAndMortyApiController : ControllerBase
 {
-	private readonly IRickAndMortyApiService _RickAndMortyApiService;
-
-	public RickAndMortyApiController(IRickAndMortyApiService rickAndMortyApiService)
-	{
-		_RickAndMortyApiService = rickAndMortyApiService;
-	}
+	public IRickAndMortyApiService IRickAndMortyApiService { get; set; }
 
 	[HttpGet("Api/Character")]
 	public async Task<IActionResult> Characters(string name, int page)
@@ -22,7 +17,7 @@ public partial class RickAndMortyApiController : ControllerBase
 				page = 1;
 
 			var response =
-				await _RickAndMortyApiService.FilterCachedAsync(name, page);
+				await IRickAndMortyApiService.FilterCachedAsync(name, page);
 
 			if (response == null)
 				return NotFound();

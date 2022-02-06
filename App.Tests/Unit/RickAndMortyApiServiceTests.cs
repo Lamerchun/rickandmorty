@@ -8,7 +8,7 @@ using us;
 
 namespace Tests.Unit;
 
-public class RickAndMortyApiServiceTests
+public class RickAndMortyApiServiceTests : UnitTestBase<RickAndMortyApiService>
 {
 	private const string _FakeResponse =
 		"{\"info\":{\"count\":1,\"pages\":1,\"next\":null,\"prev\":null},\"results\":[{\"id\":10,\"name\":\"Alan Rails\",\"status\":\"Dead\",\"species\":\"Human\",\"type\":\"Superhuman (Ghost trains summoner)\",\"gender\":\"Male\",\"origin\":{\"name\":\"unknown\",\"url\":\"\"},\"location\":{\"name\":\"Worldender's lair\",\"url\":\"https://rickandmortyapi.com/api/location/4\"},\"image\":\"https://rickandmortyapi.com/api/character/avatar/10.jpeg\",\"episode\":[\"https://rickandmortyapi.com/api/episode/25\"],\"url\":\"https://rickandmortyapi.com/api/character/10\",\"created\":\"2017-11-04T20:19:09.017Z\"}]}";
@@ -18,27 +18,24 @@ public class RickAndMortyApiServiceTests
 	{
 		// Arrange
 
-		var memoryCache =
-			new MemoryCache(new MemoryCacheOptions());
-
-		var simpleWebClient =
-			new Mock<ISimpleWebClient>();
-
-		simpleWebClient
+		Container.GetOrCreateMock<ISimpleWebClient>()
 			.Setup(x => x.GetUrlAsStringAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
 			.ReturnsAsync(new SimpleHttpResponse<string> { Status = HttpStatusCode.OK, Content = _FakeResponse });
 
-		var service =
-			new RickAndMortyApiService(
-				memoryCache,
-				simpleWebClient.Object
-			);
+		var memoryCache =
+			new MemoryCache(new MemoryCacheOptions());
+
+		Service.IMemoryCache =
+			memoryCache;
 
 		// Act
-		await service.FilterCachedAsync("x", 1);
+		await Service.FilterCachedAsync("x", 1);
 
 		// Assert
-		simpleWebClient.Verify(x => x.GetUrlAsStringAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()), Times.Once);
+
+		Container.GetOrCreateMock<ISimpleWebClient>()
+			.Verify(x => x.GetUrlAsStringAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()), Times.Once);
+
 		Assert.AreEqual(1, memoryCache.Count);
 	}
 
@@ -50,27 +47,24 @@ public class RickAndMortyApiServiceTests
 		var memoryCache =
 			new MemoryCache(new MemoryCacheOptions());
 
-		var simpleWebClient =
-			new Mock<ISimpleWebClient>();
+		Service.IMemoryCache =
+			memoryCache;
 
-		simpleWebClient
+		Container.GetOrCreateMock<ISimpleWebClient>()
 			.Setup(x => x.GetUrlAsStringAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
 			.ReturnsAsync(new SimpleHttpResponse<string> { Status = HttpStatusCode.OK, Content = _FakeResponse });
 
-		var service =
-			new RickAndMortyApiService(
-				memoryCache,
-				simpleWebClient.Object
-			);
-
-		await service.FilterCachedAsync("x", 1);
-		simpleWebClient.Reset();
+		await Service.FilterCachedAsync("x", 1);
+		Container.GetOrCreateMock<ISimpleWebClient>().Reset();
 
 		// Act
-		await service.FilterCachedAsync("x", 1);
+		await Service.FilterCachedAsync("x", 1);
 
 		// Assert
-		simpleWebClient.Verify(x => x.GetUrlAsStringAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()), Times.Never);
+
+		Container.GetOrCreateMock<ISimpleWebClient>()
+			.Verify(x => x.GetUrlAsStringAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()), Times.Never);
+
 		Assert.AreEqual(1, memoryCache.Count);
 	}
 
@@ -82,21 +76,15 @@ public class RickAndMortyApiServiceTests
 		var memoryCache =
 			new MemoryCache(new MemoryCacheOptions());
 
-		var simpleWebClient =
-			new Mock<ISimpleWebClient>();
+		Service.IMemoryCache =
+			memoryCache;
 
-		simpleWebClient
+		Container.GetOrCreateMock<ISimpleWebClient>()
 			.Setup(x => x.GetUrlAsStringAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
 			.ReturnsAsync(new SimpleHttpResponse<string> { Status = HttpStatusCode.OK, Content = _FakeResponse });
 
-		var service =
-			new RickAndMortyApiService(
-				memoryCache,
-				simpleWebClient.Object
-			);
-
 		// Act
-		var response = await service.FilterCachedAsync("x", 1);
+		var response = await Service.FilterCachedAsync("x", 1);
 
 		// Assert
 		Assert.AreEqual(1, response.Info.Count);

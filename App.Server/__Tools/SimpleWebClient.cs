@@ -4,10 +4,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using R4;
 
 namespace us;
 
-public interface ISimpleWebClient
+public interface ISimpleWebClient : ISingletonService
 {
 	Task<SimpleHttpResponse<string>> GetUrlAsStringAsync(string url, Dictionary<string, string> parameters);
 }
