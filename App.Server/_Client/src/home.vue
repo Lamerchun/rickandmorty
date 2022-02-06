@@ -255,6 +255,7 @@
 					input.value = name;
 					suggestions.value = null;
 					showSuggestions.value = false;
+					results.value = null;
 					showResults.value = true;
 					await updateUI(input.value);
 				}
