@@ -17,13 +17,13 @@
 				  @escape="onEscape"
 				  @enter="onEnter" />
 
-		<us-pager v-if="results && info?.pages > 1"
+		<us-pager v-if="showResults && results && info?.pages > 1"
 				  :page="page"
 				  :total="info?.count"
 				  :pages="info?.pages"
 				  @page="onPage" />
 
-		<us-results v-if="results"
+		<us-results v-if="showResults && results"
 					:results="results" />
 
 		<div v-if="notFound"
@@ -58,6 +58,7 @@
 			const useLiveApi = computed(() => hostIndex.value == 0);
 
 			const input = ref();
+			const inputTimeout = ref();
 
 			const suggestions = ref(true);
 			const showSuggestions = ref(false);
@@ -68,7 +69,14 @@
 			const showResults = ref(false);
 			const notFound = ref(false);
 
-			watch(() => input.value, updateUI);
+			watch(() => input.value, newValue => {
+				if (inputTimeout.value)
+					clearTimeout(inputTimeout.value);
+
+				inputTimeout.value = setTimeout(() => {
+					updateUI(newValue);
+				}, 300);
+			});
 
 			async function updateUI(value) {
 				if (!value) {
@@ -87,9 +95,7 @@
 				}
 
 				notFound.value = false;
-
-				if (showResults.value)
-					results.value = apiResults;
+				results.value = apiResults;
 
 				if (!showSuggestions.value)
 					return;
@@ -206,8 +212,9 @@
 
 				notFound,
 				results,
+				showResults,
 
-				async onInput(newValue) {
+				async onInput() {
 					resetResults();
 					showSuggestions.value = true;
 				},
@@ -235,7 +242,6 @@
 					suggestions.value = null;
 					showSuggestions.value = false;
 					input.blur();
-					await updateUI(input.value);
 				},
 
 				async onPage(pageNumber) {
