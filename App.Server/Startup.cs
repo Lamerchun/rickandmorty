@@ -51,11 +51,9 @@ public static class Startup
 			app.UseDeveloperExceptionPage();
 			app.UseViteProxy();
 		}
-		else
-		{
-			app.UseDefaultFiles();
-			app.UseStaticFiles();
-		}
+
+		app.UseDefaultFiles();
+		app.UseStaticFiles();
 
 		return app;
 	}
