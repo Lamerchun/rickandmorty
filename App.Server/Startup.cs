@@ -45,15 +45,15 @@ public static class Startup
 			x.MapGraphQL();
 		});
 
+		app.UseDefaultFiles();
+		app.UseStaticFiles();
+
 		if (app.Environment.IsDevelopment())
 		{
 			app.UseViteRunningCheck();
 			app.UseDeveloperExceptionPage();
 			app.UseViteProxy();
 		}
-
-		app.UseDefaultFiles();
-		app.UseStaticFiles();
 
 		return app;
 	}
