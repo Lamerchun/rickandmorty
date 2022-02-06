@@ -1,6 +1,6 @@
 ﻿<template>
-	<div class="flex flex-col gap-12 items-center">
-		<h1 class="text-5xl font-bold select-none">Rick &amp; Morty</h1>
+	<div class="flex flex-col gap-12 items-center text-center">
+		<h1 class="text-5xl font-bold select-none">Rick and Morty</h1>
 
 		<div class="flex flex-col gap-4 items-center">
 			<us-switch v-model="apiIndex"
